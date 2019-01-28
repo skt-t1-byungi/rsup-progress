@@ -1,0 +1,15 @@
+{
+    "name": "rsup-progress",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "dev": "parcel doc/index.html -d public"
+    },
+    "devDependencies": {
+        "parcel-bundler": "^1.11.0",
+        "tslint": "^5.12.1",
+        "tslint-config-byungi": "^0.0.9",
+        "typescript": "^3.2.4"
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "extends": "tslint-config-byungi",
+    "rules": {
+        "object-literal-sort-keys": false
+    }
+}
