@@ -74,26 +74,12 @@ export class Progress {
         if (this._isScheduled) this._isScheduled = false
         if (!this._isProgress || this._isHiding) return
 
-        if (this._tickId) {
+        if (this._tickId || immediately) {
             this._isProgress = false
             document.body.removeChild(this._el)
-            return this._clearTick()
-        }
 
-        const end = () => {
-            this._isHiding = false
-            this._isProgress = false
-
-            if (this._isScheduled) {
-                this._isScheduled = false
-                this.start()
-            } else {
-                document.body.removeChild(this._el)
-            }
-        }
-
-        if (immediately) {
-            return end()
+            if (this._tickId) this._clearTick()
+            return
         }
 
         this._isHiding = true
@@ -105,7 +91,16 @@ export class Progress {
             transition: `opacity ${this._opts.hideDuration}ms ${PERSIST_TIME}ms`
         })
 
-        setTimeout(end, this._opts.hideDuration + PERSIST_TIME)
+        setTimeout(() => {
+            this._isHiding = false
+            this._isProgress = false
+            document.body.removeChild(this._el)
+
+            if (this._isScheduled) {
+                this._isScheduled = false
+                this.start()
+            }
+        }, this._opts.hideDuration + PERSIST_TIME)
     }
 }
 
