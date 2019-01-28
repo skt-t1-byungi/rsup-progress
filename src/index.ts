@@ -1,3 +1,5 @@
+import { assert } from './helpers'
+
 type UserOptions = Partial<{
     maxWidth: number | string,
     height: number | string,
@@ -149,13 +151,9 @@ function normalizeOptions (opts: UserOptions): Options {
     assert(opts.height, 'options.height', 'string')
     assert(opts.maxDuration, 'options.maxDuration', 'number')
     assert(opts.hideDuration, 'options.hideDuration', 'number')
+    assert(opts.zIndex, 'options.zIndex', 'string')
     assert(opts.className, 'options.className', 'string')
     assert(opts.color, 'options.color', 'string')
 
     return opts as Options
-}
-
-function assert (val: any, name: string, expected: string) {
-    const type = typeof val
-    if (type !== expected) throw new TypeError(`Expected \`${name}\` to be of type "${expected}", but "${type}".`)
 }
