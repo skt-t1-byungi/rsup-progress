@@ -4,7 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "dev": "parcel doc/index.html -d public"
+        "dev": "parcel website/index.html -d public"
     },
     "devDependencies": {
         "parcel-bundler": "^1.11.0",

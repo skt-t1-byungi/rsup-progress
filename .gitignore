@@ -1,6 +1,7 @@
 node_modules/
 dist/
 public/
+gh-pages/
 .cache/
 *.log
 *.lock
