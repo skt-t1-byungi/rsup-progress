@@ -25,6 +25,7 @@ export class Progress {
     private _isHiding = false
     private _isScheduled = false
     private _tickId: number | null = null
+    private _promises: Array<Promise<any>> = []
 
     constructor (userOpts: UserOptions = {}) {
         this._el = document.createElement('div')
@@ -39,7 +40,7 @@ export class Progress {
         assertProp(userOpts, 'zIndex', ['number', 'string'])
         assertProp(userOpts, 'color', 'string')
 
-        if (userOpts.className && (typeof userOpts.className !== 'string' || !Array.isArray(userOpts.className))) {
+        if (userOpts.className && (typeof userOpts.className !== 'string' && !Array.isArray(userOpts.className))) {
             throw new TypeError(`[rsup-progress] Expected \`className\` to be of type "string, string[]".`)
         }
 
@@ -100,6 +101,8 @@ export class Progress {
     }
 
     public end (immediately = false) {
+        this._clearPromise()
+
         if (this._isScheduled) this._isScheduled = false
         if (!this._isProgress || this._isHiding) return
 
@@ -132,20 +135,49 @@ export class Progress {
             }
         }, this._opts.hideDuration + PERSIST_TIME)
     }
+
+    public promise (promise: Promise<any>, delay = 0) {
+        this._promises.push(promise)
+
+        if (delay > 0) {
+            setTimeout(() => {
+                if (!this._isProgress && this._promises.indexOf(promise) > -1) this.start()
+            }, delay)
+        } else {
+            this.start()
+        }
+
+        return promise.then(
+            val => {
+                this._clearPromise(promise)
+                if (this._promises.length === 0 && this._isProgress) this.end()
+                return val
+            },
+            err => {
+                this._clearPromise(promise)
+                throw err
+            }
+        )
+    }
+
+    private _clearPromise (promise?: Promise<any>) {
+        this._promises = promise ? this._promises.filter(p => p !== promise) : []
+    }
 }
 
 export default Progress
 
 function normalizeOptions (opts: UserOptions): Options {
-    opts = Object.assign({
-        maxWidth: '99.5%',
+    opts = {
+        maxWidth: '99.7%',
         height: '3px',
         duration: 60000,
         hideDuration: 400,
         zIndex: '9999',
         color: '#ff1a59',
-        className: ''
-    }, opts)
+        className: '',
+        ...opts
+    }
 
     if (typeof opts.maxWidth === 'number') opts.maxWidth = opts.maxWidth + 'px'
     if (typeof opts.height === 'number') opts.height = opts.height + 'px'
@@ -162,8 +194,4 @@ function assertProp (obj: any, prop: string, expected: string | string[]) {
     if (expected.indexOf(type) > -1) return
 
     throw new TypeError(`[rsup-progress] Expected \`${prop}\` to be of type "${expected.join(', ')}", but "${type}".`)
-}
-
-export function delay (ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms))
 }
