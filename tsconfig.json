@@ -7,5 +7,8 @@
         "outDir": "./dist",
         "strict": true,
         "esModuleInterop": true
-    }
+    },
+    "include": [
+        "src/index.ts"
+    ]
 }
