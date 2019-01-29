@@ -73,10 +73,12 @@ export class Progress {
 
         this._isProgress = true
 
+        const transition = `width ${this._opts.duration}ms cubic-bezier(0,1,0,1)`
         this._css({
             width: '0',
             opacity: '1',
-            transition: `width ${this._opts.duration}ms cubic-bezier(0,1,0,1)`
+            transition,
+            webkitTransition: transition
         })
 
         document.body.appendChild(this._el)
@@ -116,12 +118,14 @@ export class Progress {
 
         this._isHiding = true
 
-        const PERSIST_TIME = 100
+        const PERSIST_TIME = 150
+        const transition = `width 50ms, opacity ${this._opts.hideDuration}ms ${PERSIST_TIME}ms`
 
         this._css({
             width: '100%',
             opacity: '0',
-            transition: `width 50ms, opacity ${this._opts.hideDuration}ms ${PERSIST_TIME}ms`
+            transition,
+            webkitTransition: transition
         })
 
         setTimeout(() => {
@@ -138,19 +142,24 @@ export class Progress {
 
     public promise (promise: Promise<any>, delay = 0) {
         this._promises.push(promise)
+        let started = false
 
         if (delay > 0) {
             setTimeout(() => {
-                if (!this._isProgress && this._promises.indexOf(promise) > -1) this.start()
+                if (!this._isProgress && this._promises.indexOf(promise) > -1) {
+                    started = true
+                    this.start()
+                }
             }, delay)
         } else {
+            started = true
             this.start()
         }
 
         return promise.then(
             val => {
                 this._clearPromise(promise)
-                if (this._promises.length === 0 && this._isProgress) this.end()
+                if (started && this._promises.length === 0 && this._isProgress) this.end()
                 return val
             },
             err => {
@@ -170,8 +179,8 @@ export default Progress
 function normalizeOptions (opts: UserOptions): Options {
     opts = {
         maxWidth: '99.7%',
-        height: '3px',
-        duration: 60000,
+        height: '4px',
+        duration: 90000,
         hideDuration: 400,
         zIndex: '9999',
         color: '#ff1a59',
