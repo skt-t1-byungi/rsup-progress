@@ -140,7 +140,7 @@ export class Progress {
         }, this._opts.hideDuration + PERSIST_TIME)
     }
 
-    public promise (promise: Promise<any>, delay = 0) {
+    public promise<T> (promise: Promise<T>, delay = 0) {
         this._promises.push(promise)
         let started = false
 

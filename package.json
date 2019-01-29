@@ -1,19 +1,27 @@
 {
     "name": "rsup-progress",
-    "version": "1.0.0",
-    "main": "index.js",
+    "version": "0.0.1",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
     "license": "MIT",
     "scripts": {
         "dev": "parcel website/index.html -d public",
+        "test": "puppet-run src/test.ts",
         "build": "tsc"
     },
     "engines": {
         "node": ">= 8"
     },
     "devDependencies": {
+        "@types/tape": "^4.2.33",
         "parcel-bundler": "^1.11.0",
+        "puppet-run": "^0.4.0",
+        "tape": "^4.9.2",
         "tslint": "^5.12.1",
-        "tslint-config-byungi": "^0.0.9",
+        "tslint-config-byungi": "^0.1.0",
         "typescript": "^3.2.4"
     }
 }
