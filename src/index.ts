@@ -111,7 +111,6 @@ export class Progress {
         if (this._tickId || immediately) {
             this._isProgress = false
             document.body.removeChild(this._el)
-
             if (this._tickId) this._clearTick()
             return
         }
@@ -156,20 +155,18 @@ export class Progress {
             this.start()
         }
 
+        const onFinally = () => {
+            this._clearPromise(promise)
+            if (started && this._promises.length === 0 && this._isProgress) this.end()
+        }
+
         return promise.then(
-            val => {
-                this._clearPromise(promise)
-                if (started && this._promises.length === 0 && this._isProgress) this.end()
-                return val
-            },
-            err => {
-                this._clearPromise(promise)
-                throw err
-            }
+            val => (onFinally(), val),
+            err => (onFinally(), Promise.reject(err))
         )
     }
 
-    private _clearPromise (promise?: Promise<any>) {
+    private _clearPromise (promise ?: Promise<any>) {
         this._promises = promise ? this._promises.filter(p => p !== promise) : []
     }
 }

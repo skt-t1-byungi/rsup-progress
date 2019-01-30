@@ -30,7 +30,7 @@ test('progress', t => {
 
     delay(100).then(() => {
         const w = getWidth()
-        t.ok(0 < w && w < 100)
+        t.true(0 < w && w < 100)
 
         delay(100).then(() => {
             t.is(getWidth(), 100)
@@ -47,11 +47,27 @@ test('promise', t => {
     const progress = new Progress({ hideDuration: 0 })
 
     progress.promise(delay(100))
-    t.ok(progress.isProgress)
+    t.true(progress.isProgress)
 
     const PERSIST_TIME = 150
     delay(105 + PERSIST_TIME).then(() => {
-        t.notOk(progress.isProgress)
+        t.false(progress.isProgress)
+        clear(), t.end()
+    })
+})
+
+test('promise # reject', t => {
+    const progress = new Progress({ hideDuration: 0 })
+
+    t.plan(3)
+    progress.promise(delay(100).then(() => { throw new Error('throw') }))
+        .catch(() => t.pass())
+
+    t.true(progress.isProgress)
+
+    const PERSIST_TIME = 150
+    delay(105 + PERSIST_TIME).then(() => {
+        t.false(progress.isProgress)
         clear(), t.end()
     })
 })
