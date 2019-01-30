@@ -4,9 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>rsup-progress</title>
+    <title>Rsup Progress</title>
 </head>
 <body>
+    <div>
+        <h1>
+            <span>Rsup</span>
+            <span>Progress</span>
+        </h1>
+        <p>A modern progressbar that supports promise.</p>
+        <a href="https://github.com/skt-t1-byungi/rsup-progress">View on <span>Github</span></a>
+        <div>
+            <button>
+                progress<span>.start()</span>
+            </button>
+            <button>
+                progress<span>.end()</span>
+            </button>
+            <button>
+                progress<span>.end(<span>true</span>)</span>
+            </button>
+            <button>
+                progress<span>.promise(<span>delay(2000)</span>)</span>
+            </button>
+            <button>
+                progress<span>.promise(<span>delay(2000)</span>, <span>1000</span>)</span>
+            </button>
+        </div>
+    </div>
+    <div>
+        <p>
+            The purpose of the progressbar is to provide interaction.
+            However, developers often focus on progress information that is relatively insignificant.
+        </p>
+        <s>
+            <span>rsup-progressbar</span> has only <span>start</span> and <span>end</span> methods.
+            The progressbar speed is initially fast, but slows down and does not finish.
+            This is complete by calling the <span>end</span> function.
+        </p>
+        <p>
+            Users experience interaction with smooth progressbar motion without progress information.
+        </p>
+    </div>
     <script src="./app.js"></script>
 </body>
 </html>
