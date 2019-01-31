@@ -1,0 +1,133 @@
+@import '~thejungle/reset';
+@import '~thejungle';
+
+::-moz-selection { background: #F0A4A7; }
+::selection { background: #F0A4A7; }
+
+body{
+    background: #cfc4c3;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.top {
+    font-size: 1rem;
+    padding-top: 8vh;
+    padding-bottom: em(60px);
+    background: #f9f8f2;
+
+    &__logo{
+        margin-bottom: em(60px);
+    }
+
+    &__github{
+        font-size: rem(18px);
+        margin-bottom: em(50px, 18px);
+    }
+
+    &__btns{
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        max-width: em(1000px);
+        flex-wrap: wrap;
+    }
+
+    &__btn{
+        font-size: 18px;
+        margin: em(5px, 18px);
+        cursor: pointer;
+    }
+}
+
+.logo{
+    color: #2d2f32;
+    font-size: 1rem;
+
+    &__img{
+        width: em(160px);
+        margin-bottom: em(10px);
+    }
+
+    &__title{
+        font-family: 'Josefin Sans', sans-serif;
+        display: flex;
+        justify-content: center;
+        margin-bottom: em(20px);
+    }
+
+    &__txt1{
+        font-size: em(72px);
+        font-weight: bold;
+    }
+
+    &__txt2{
+        font-size: em(48px);
+        letter-spacing: 0.275em;
+        margin-left: em(-70px, 48px);
+        margin-top: em(80px, 48px);
+    }
+
+    &__desc{
+        font-family: initial;
+        color: #707271;
+        font-size: em(24px);
+    }
+}
+
+.full-btn{
+    text-decoration: none;
+    color: #aa999d;
+    background: #5a4545;
+    padding: em(12px) em(28px);
+    border-radius: #{em(20px)} / 50%;
+    display: inline-block;
+    box-shadow: 1px 2px 6px 1px rgba(black, 0.4);
+    transition: background 0.2s;
+
+    &__bold{
+        font-weight: bold;
+        color: white;
+    }
+
+    &:hover{
+        background: darken(#5a4545, 6);
+        transition: background 0.4s;
+    }
+}
+
+.gh-btn{
+    -webkit-appearance: none;
+    appearance: none;
+    border: 2px solid #574142;
+    background: transparent;
+    color: #604b4c;
+    padding: em(14px) em(12px);
+    outline: none;
+    transition: background 0.2s;
+
+    &:hover{
+        background: #e3d8b9;
+    }
+
+    &__bold{
+        font-weight: bold;
+    }
+
+    &__param{
+        color: #0d9b8c;
+    }
+}
+
+.bottom{
+    padding-top: 40px;
+    text-align: center;
+    color: #7e696d;
+    font-size: 1rem;
+
+    &__txt{
+        margin: 0 auto;
+        line-height: 1.5;
+        font-size: em(18px);
+    }
+}

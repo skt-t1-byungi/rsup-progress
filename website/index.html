@@ -4,48 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="Description" content="A modern progressbar that supports promise.">
+    <meta name="Keywords" content="progress, progressbar, javascript, promise, loader">
+    <meta name="Author" content="skt-t1-byungi">
     <title>Rsup Progress</title>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="./style.scss">
 </head>
 <body>
-    <div>
-        <h1>
-            <span>Rsup</span>
-            <span>Progress</span>
+    <div class="top">
+        <h1 class="logo top__logo">
+            <img class="logo__img" src="./logo.svg" alt="logo">
+            <div class="logo__title">
+                <span class="logo__txt1">Rsup</span>
+                <span class="logo__txt2">Progress</span>
+            </div>
+            <p class="logo__desc" class="">A modern progressbar that supports promise.</p>
         </h1>
-        <p>A modern progressbar that supports promise.</p>
-        <a href="https://github.com/skt-t1-byungi/rsup-progress">View on <span>Github</span></a>
-        <div>
-            <button>
-                progress<span>.start()</span>
+        <a class="full-btn top__github" href="https://github.com/skt-t1-byungi/rsup-progress">View on <span class="full-btn__bold">Github</span></a>
+        <div class="top__btns">
+            <button class="gh-btn top__btn" onclick="progress.start()">
+                progress<span class="gh-btn__bold">.start()</span>
             </button>
-            <button>
-                progress<span>.end()</span>
+            <button class="gh-btn top__btn" onclick="progress.end()">
+                progress<span class="gh-btn__bold">.end()</span>
             </button>
-            <button>
-                progress<span>.end(<span>true</span>)</span>
+            <button class="gh-btn top__btn" onclick="progress.end(true)">
+                progress<span class="gh-btn__bold">.end(<span class="gh-btn__param">true</span>)</span>
             </button>
-            <button>
-                progress<span>.promise(<span>delay(2000)</span>)</span>
+            <button class="gh-btn top__btn" onclick="progress.promise(delay(1500))">
+                progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(1500)</span>)</span>
             </button>
-            <button>
-                progress<span>.promise(<span>delay(2000)</span>, <span>1000</span>)</span>
+            <button class="gh-btn top__btn" onclick="progress.promise(delay(1500), 1000)">
+                progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(1500)</span>, <span class="gh-btn__param">1000</span>)</span>
+            </button>
+            <button class="gh-btn top__btn" onclick="progress.promise(delay(1500), 1500)">
+                progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(1500)</span>, <span class="gh-btn__param">1500</span>)</span>
             </button>
         </div>
     </div>
-    <div>
-        <p>
-            The purpose of the progressbar is to provide interaction.
-            However, developers often focus on progress information that is relatively insignificant.
-        </p>
-        <s>
-            <span>rsup-progressbar</span> has only <span>start</span> and <span>end</span> methods.
-            The progressbar speed is initially fast, but slows down and does not finish.
-            This is complete by calling the <span>end</span> function.
-        </p>
-        <p>
-            Users experience interaction with smooth progressbar motion without progress information.
-        </p>
+    <div class="bottom">
+        <div class="bottom__txt">
+            <p>
+                The progressbar speed is initially fast, but slows down and does not finish. This is complete by calling the <span>end</span> function.
+            </p>
+            <p>
+                Users experience interaction with smooth progressbar motion without progress information.
+            </p>
+        </div>
     </div>
-    <script src="./app.js"></script>
+    <script src="./app.ts"></script>
 </body>
 </html>

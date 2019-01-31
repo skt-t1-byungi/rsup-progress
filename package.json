@@ -1,8 +1,15 @@
 {
     "name": "rsup-progress",
+    "description": "A modern progressbar that supports promise.",
     "version": "0.0.1",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
+    "keywords": [
+        "progress",
+        "progressbar",
+        "loader",
+        "promise"
+    ],
     "files": [
         "dist"
     ],
@@ -16,10 +23,13 @@
         "node": ">= 6"
     },
     "devDependencies": {
+        "@byungi/p-delay": "^0.0.3",
         "@types/tape": "^4.2.33",
         "parcel-bundler": "^1.11.0",
         "puppet-run": "^0.4.0",
+        "sass": "^1.16.1",
         "tape": "^4.9.2",
+        "thejungle": "^0.4.2",
         "tslint": "^5.12.1",
         "tslint-config-byungi": "^0.1.0",
         "typescript": "^3.2.4"
