@@ -8,6 +8,7 @@ test.onFinish(() => puppet.exit(0));
 const $ = (selector: string) => document.querySelector(selector)
 const clear = () => (document.body.innerHTML = '')
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+const PERSIST_TIME = 150
 
 test('attach element', t => {
     const progress = new Progress({ className: 'bar' })
@@ -49,7 +50,6 @@ test('promise', t => {
     progress.promise(delay(100))
     t.true(progress.isProgress)
 
-    const PERSIST_TIME = 150
     delay(105 + PERSIST_TIME).then(() => {
         t.false(progress.isProgress)
         clear(), t.end()
@@ -86,5 +86,17 @@ test('promise # add When added midway', t => {
     delay(185 + PERSIST_TIME).then(() => {
         t.notOk(progress.isProgress)
         clear(), t.end()
+    })
+})
+
+test('Ignore promise that has not started.', t => {
+    const progress = new Progress({ hideDuration: 0 })
+
+    progress.promise(delay(100))
+    progress.promise(delay(200), 200)
+
+    delay(150 + PERSIST_TIME).then(() => {
+        t.false(progress.isProgress)
+        t.end()
     })
 })

@@ -139,24 +139,29 @@ export class Progress {
     }
 
     public promise<T> (promise: Promise<T>, delay = 0) {
-        this._promises.push(promise)
         let started = false
+        let ended = false
 
-        if (delay > 0) {
-            setTimeout(() => {
-                if (this._promises.indexOf(promise) > -1) {
-                    started = true
-                    this.start()
-                }
-            }, delay)
-        } else {
+        const start = () => {
             started = true
+            this._promises.push(promise)
             this.start()
         }
 
+        if (delay > 0) {
+            setTimeout(() => {
+                if (!ended) start()
+            }, delay)
+        } else {
+            start()
+        }
+
         const onFinally = () => {
-            this._clearPromise(promise)
-            if (started && this._promises.length === 0 && this._isProgress) this.end()
+            ended = true
+            if (started) {
+                this._clearPromise(promise)
+                if (this._promises.length === 0 && this._isProgress) this.end()
+            }
         }
 
         return promise.then(
