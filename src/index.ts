@@ -1,21 +1,23 @@
 interface UserOptions {
-    maxWidth?: number | string,
-    height?: number | string,
-    duration?: number,
-    hideDuration?: number,
-    zIndex?: number | string,
-    className?: string,
+    maxWidth?: number | string
+    height?: number | string
+    duration?: number
+    hideDuration?: number
+    zIndex?: number | string
+    className?: string
     color?: string
+    timing?: string
 }
 
 interface Options {
-    maxWidth: string,
-    height: string,
-    duration: number,
-    hideDuration: number,
-    zIndex: string,
-    className: string,
+    maxWidth: string
+    height: string
+    duration: number
+    hideDuration: number
+    zIndex: string
+    className: string
     color: string
+    timing: string
 }
 
 export class Progress {
@@ -70,7 +72,7 @@ export class Progress {
 
         this._isProgress = true
 
-        const transition = `width ${this._opts.duration}ms cubic-bezier(0,1,0.2,1)`
+        const transition = `width ${this._opts.duration}ms ${this._opts.timing}`
         this._css({
             width: '0',
             opacity: '1',
@@ -179,6 +181,7 @@ function normalizeOptions (opts: UserOptions): Options {
         zIndex: '9999',
         color: '#ff1a59',
         className: '',
+        timing: 'cubic-bezier(0,1,0,1)',
         ...opts
     }
 
