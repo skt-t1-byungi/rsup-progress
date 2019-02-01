@@ -7,4 +7,3 @@ parcelRequire=function(e,r,n,t){var i="function"==typeof parcelRequire&&parcelRe
 },{}],"EVxB":[function(require,module,exports) {
 "use strict";Object.defineProperty(exports,"__esModule",{value:!0});var e=require("@byungi/p-delay"),r=require("../src/");window.progress=new r.Progress({height:5}),window.delay=e.pDelay;
 },{"@byungi/p-delay":"mtLs","../src/":"+fUd"}]},{},["EVxB"], null)
-//# sourceMappingURL=app.0e154bec.map
