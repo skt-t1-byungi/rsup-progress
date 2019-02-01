@@ -1,24 +1,25 @@
 @import '~thejungle/reset';
+@import '~thejungle/media';
 @import '~thejungle';
 
 ::-moz-selection { background: #F0A4A7; }
 ::selection { background: #F0A4A7; }
 
-body{
+html, body{
     background: #cfc4c3;
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
+
+    @include media('<=tablet'){ font-size: 14px; }
+    @include media('<=phone'){ font-size: 12px; }
 }
 
 .top {
     font-size: 1rem;
-    padding-top: 8vh;
-    padding-bottom: em(60px);
+    padding: 8vh em(20px) em(60px);
     background: #f9f8f2;
 
-    &__logo{
-        margin-bottom: em(60px);
-    }
+    &__logo{ margin-bottom: em(60px); }
 
     &__github{
         font-size: rem(18px);
@@ -31,10 +32,14 @@ body{
         justify-content: center;
         max-width: em(1000px);
         flex-wrap: wrap;
+
+        @include media('<=tablet'){
+            flex-flow: column;
+        }
     }
 
     &__btn{
-        font-size: 18px;
+        font-size: em(18px);
         margin: em(5px, 18px);
         cursor: pointer;
     }
@@ -43,6 +48,8 @@ body{
 .logo{
     color: #2d2f32;
     font-size: 1rem;
+
+    @include media('<=tablet'){ font-size: 0.85rem; }
 
     &__img{
         width: em(160px);
@@ -69,9 +76,9 @@ body{
     }
 
     &__desc{
-        font-family: initial;
         color: #707271;
         font-size: em(24px);
+        letter-spacing: 0.06em;
     }
 }
 
@@ -82,7 +89,7 @@ body{
     padding: em(12px) em(28px);
     border-radius: #{em(20px)} / 50%;
     display: inline-block;
-    box-shadow: 1px 2px 6px 1px rgba(black, 0.4);
+    box-shadow: 1px 1px 10px 1px rgba(black, 0.3);
     transition: background 0.2s;
 
     &__bold{
@@ -92,7 +99,7 @@ body{
 
     &:hover{
         background: darken(#5a4545, 6);
-        transition: background 0.4s;
+        transition-duration: 0.4s;
     }
 }
 
@@ -108,26 +115,30 @@ body{
 
     &:hover{
         background: #e3d8b9;
+        transition-duration: 0.4s;
+        text-decoration: underline;
     }
 
-    &__bold{
-        font-weight: bold;
-    }
-
-    &__param{
-        color: #0d9b8c;
-    }
+    &__bold{ font-weight: bold; }
+    &__param{ color: #0d9b8c; }
 }
 
 .bottom{
-    padding-top: 40px;
     text-align: center;
     color: #7e696d;
     font-size: 1rem;
+    padding: em(40px) em(20px);
 
     &__txt{
         margin: 0 auto;
         line-height: 1.5;
         font-size: em(18px);
+        margin-bottom: em(50px);
+    }
+    &__license{ font-size: em(18px); }
+    &__author{
+        font-size: em(18px);
+        font-family: 'Josefin Sans', sans-serif;
+        color: darken(#7e696d, 8)
     }
 }

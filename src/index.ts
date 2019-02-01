@@ -4,7 +4,7 @@ interface UserOptions {
     duration?: number,
     hideDuration?: number,
     zIndex?: number | string,
-    className?: string | string[],
+    className?: string,
     color?: string
 }
 
@@ -38,11 +38,8 @@ export class Progress {
         assertProp(userOpts, 'duration', 'number')
         assertProp(userOpts, 'hideDuration', 'number')
         assertProp(userOpts, 'zIndex', ['number', 'string'])
+        assertProp(userOpts, 'className', 'string')
         assertProp(userOpts, 'color', 'string')
-
-        if (userOpts.className && (typeof userOpts.className !== 'string' && !Array.isArray(userOpts.className))) {
-            throw new TypeError(`[rsup-progress] Expected \`className\` to be of type "string, string[]".`)
-        }
 
         const opts = this._opts = normalizeOptions(userOpts)
 
@@ -73,7 +70,7 @@ export class Progress {
 
         this._isProgress = true
 
-        const transition = `width ${this._opts.duration}ms cubic-bezier(0,1,0,1)`
+        const transition = `width ${this._opts.duration}ms cubic-bezier(0,1,0.2,1)`
         this._css({
             width: '0',
             opacity: '1',
@@ -145,7 +142,7 @@ export class Progress {
 
         if (delay > 0) {
             setTimeout(() => {
-                if (!this._isProgress && this._promises.indexOf(promise) > -1) {
+                if (this._promises.indexOf(promise) > -1) {
                     started = true
                     this.start()
                 }
@@ -175,9 +172,9 @@ export default Progress
 
 function normalizeOptions (opts: UserOptions): Options {
     opts = {
-        maxWidth: '99.7%',
+        maxWidth: '99.8%',
         height: '4px',
-        duration: 90000,
+        duration: 60000,
         hideDuration: 400,
         zIndex: '9999',
         color: '#ff1a59',
@@ -188,7 +185,6 @@ function normalizeOptions (opts: UserOptions): Options {
     if (typeof opts.maxWidth === 'number') opts.maxWidth = opts.maxWidth + 'px'
     if (typeof opts.height === 'number') opts.height = opts.height + 'px'
     if (typeof opts.zIndex === 'number') opts.zIndex = String(opts.zIndex)
-    if (Array.isArray(opts.className)) opts.className = opts.className.join(' ')
 
     return opts as Options
 }
@@ -199,5 +195,5 @@ function assertProp (obj: any, prop: string, expected: string | string[]) {
     if (typeof expected === 'string') expected = [expected]
     if (expected.indexOf(type) > -1) return
 
-    throw new TypeError(`[rsup-progress] Expected \`${prop}\` to be of type "${expected.join(', ')}", but "${type}".`)
+    throw new TypeError(`[rsup-progress] Expected \`${prop}\` to be of type ${expected.join(', ')}, but "${type}".`)
 }

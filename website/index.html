@@ -32,27 +32,31 @@
             <button class="gh-btn top__btn" onclick="progress.end(true)">
                 progress<span class="gh-btn__bold">.end(<span class="gh-btn__param">true</span>)</span>
             </button>
-            <button class="gh-btn top__btn" onclick="progress.promise(delay(1500))">
-                progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(1500)</span>)</span>
+            <button class="gh-btn top__btn" onclick="progress.promise(delay(1000))">
+                progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(1000)</span>)</span>
             </button>
-            <button class="gh-btn top__btn" onclick="progress.promise(delay(1500), 1000)">
-                progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(1500)</span>, <span class="gh-btn__param">1000</span>)</span>
+            <button class="gh-btn top__btn" onclick="progress.promise(delay(1000), 600)">
+                progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(1000)</span>, <span class="gh-btn__param">600</span>)</span>
             </button>
-            <button class="gh-btn top__btn" onclick="progress.promise(delay(1500), 1500)">
-                progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(1500)</span>, <span class="gh-btn__param">1500</span>)</span>
+            <button class="gh-btn top__btn" onclick="progress.promise(delay(1000), 1000)">
+                progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(1000)</span>, <span class="gh-btn__param">1000</span>)</span>
             </button>
         </div>
     </div>
-    <div class="bottom">
+    <footer class="bottom">
         <div class="bottom__txt">
             <p>
                 The progressbar speed is initially fast, but slows down and does not finish. This is complete by calling the <span>end</span> function.
             </p>
             <p>
-                Users experience interaction with smooth progressbar motion without progress information.
+                Users experience interaction with smooth progressbar animation without progress information.
             </p>
         </div>
-    </div>
+
+        <div class="bottom__license">
+            MIT License ❤️📝 <span class="bottom__author">skt-t1-byungi</span>
+        </div>
+    </footer>
     <script src="./app.ts"></script>
 </body>
 </html>
