@@ -58,7 +58,7 @@ export class Progress {
     }
 
     private _css (style: Partial<CSSStyleDeclaration>) {
-        Object.assign(this._el.style, style)
+        assign(this._el.style, style)
     }
 
     get isProgress () {
@@ -179,7 +179,7 @@ export class Progress {
 export default Progress
 
 function normalizeOptions (opts: UserOptions): Options {
-    opts = {
+    opts = assign({
         maxWidth: '99.8%',
         height: '4px',
         duration: 60000,
@@ -187,15 +187,21 @@ function normalizeOptions (opts: UserOptions): Options {
         zIndex: '9999',
         color: '#ff1a59',
         className: '',
-        timing: 'cubic-bezier(0,1,0,1)',
-        ...opts
-    }
+        timing: 'cubic-bezier(0,1,0,1)'
+    }, opts)
 
     if (typeof opts.maxWidth === 'number') opts.maxWidth = opts.maxWidth + 'px'
     if (typeof opts.height === 'number') opts.height = opts.height + 'px'
     if (typeof opts.zIndex === 'number') opts.zIndex = String(opts.zIndex)
 
     return opts as Options
+}
+
+function assign<T1,T2> (t: T1, src: T2): T1 & T2 {
+    for (const k in src) {
+        if (Object.prototype.hasOwnProperty.call(src, k)) (t as any)[k] = src[k]
+    }
+    return t as T1 & T2
 }
 
 function assertProp (obj: any, prop: string, expected: string | string[]) {

@@ -134,6 +134,11 @@ html, body{
         font-size: em(18px);
         margin-bottom: em(50px);
     }
+    &__em{
+        background: #f4c6c5;
+        padding: 0 em(4px);
+        font-weight: bold;
+    }
     &__license{ font-size: em(18px); }
     &__author{
         font-size: em(18px);
