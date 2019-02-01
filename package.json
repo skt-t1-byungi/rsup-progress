@@ -2,6 +2,8 @@
     "name": "rsup-progress",
     "description": "A modern progressbar that supports promise.",
     "version": "0.0.1",
+    "repository": "https://github.com/skt-t1-byungi/rsup-progress.git",
+    "author": "skt-t1-byungi <tiniwz@gmail.com>",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "keywords": [
@@ -17,7 +19,9 @@
     "scripts": {
         "dev": "parcel website/index.html -d public",
         "test": "puppet-run src/test.ts",
-        "build": "tsc"
+        "build": "tsc",
+        "build:website": "parcel build website/index.html -d public --public-url ./  --no-source-maps",
+        "deploy": "rm -rf public && npm run build:website && gh-pages -d public"
     },
     "engines": {
         "node": ">= 6"
@@ -25,6 +29,7 @@
     "devDependencies": {
         "@byungi/p-delay": "^0.0.3",
         "@types/tape": "^4.2.33",
+        "gh-pages": "^2.0.1",
         "parcel-bundler": "^1.11.0",
         "puppet-run": "^0.4.0",
         "sass": "^1.16.1",
