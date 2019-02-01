@@ -34,9 +34,7 @@ html, body{
         max-width: em(1000px);
         flex-wrap: wrap;
 
-        @include media('<=tablet'){
-            flex-flow: column;
-        }
+        @include media('<=tablet'){ flex-flow: column; }
     }
 
     &__btn{

@@ -42,6 +42,7 @@ export class Progress {
         assertProp(userOpts, 'zIndex', ['number', 'string'])
         assertProp(userOpts, 'className', 'string')
         assertProp(userOpts, 'color', 'string')
+        assertProp(userOpts, 'timing', 'string')
 
         const opts = this._opts = normalizeOptions(userOpts)
 
