@@ -21,7 +21,8 @@
         "test": "puppet-run src/test.ts",
         "build": "tsc",
         "build:website": "parcel build website/index.html -d public --public-url ./  --no-source-maps",
-        "deploy": "rm -rf public && npm run build:website && gh-pages -d public"
+        "deploy": "rm -rf public && npm run build:website && gh-pages -d public",
+        "prepublishOnly": "npm run test && npm run build"
     },
     "engines": {
         "node": ">= 6"
