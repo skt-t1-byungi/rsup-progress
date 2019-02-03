@@ -1,6 +1,7 @@
-<div align="center" style="padding-bottom: 60px">
+<div align="center">
     <img src="./logo.png">
 </div>
+<br><br>
 
 > A simple progress bar that supports promise.
 
