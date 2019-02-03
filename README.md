@@ -1,11 +1,12 @@
-<h1 align="center">
+<div align="center" style="padding-bottom: 60px">
     <img src="./logo.png">
-</h1>
+</div>
 
-> A simple progressbar that supports promise.
+> A simple progress bar that supports promise.
 
 [![npm](https://flat.badgen.net/npm/v/rsup-prgoress)](https://www.npmjs.com/package/rsup-progress)
 [![npm](https://flat.badgen.net/npm/license/rsup-prgoress)](#LICENSE)
+
 
 Progress bar speed is fast at first, but it slows down and does not end. Call the `end` function to complete.<br>
 Users experience interaction with smooth animation without progress information.
