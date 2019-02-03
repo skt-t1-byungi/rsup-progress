@@ -5,8 +5,8 @@
 
 > A simple progress bar that supports promise.
 
-[![npm](https://flat.badgen.net/npm/v/rsup-prgoress)](https://www.npmjs.com/package/rsup-progress)
-[![npm](https://flat.badgen.net/npm/license/rsup-prgoress)](#LICENSE)
+[![npm](https://flat.badgen.net/npm/v/rsup-progress)](https://www.npmjs.com/package/rsup-progress)
+[![npm](https://flat.badgen.net/npm/license/rsup-progress)](https://github.com/skt-t1-byungi/rsup-progress/blob/master/LICENSE)
 
 
 Progress bar speed is fast at first, but it slows down and does not end. Call the `end` function to complete.<br>
@@ -15,13 +15,6 @@ Users experience interaction with smooth animation without progress information.
 https://skt-t1-byungi.github.io/rsup-progress/
 
 ## Example
-Library import and instance creation.
-```js
-import Progress from 'rsup-progress'
-
-const progress = new Progress()
-```
-
 Example using `start`, `end` method.
 ```js
 progress.start()
@@ -39,6 +32,25 @@ const response = await progress.promise(fetch('/data.json'))
 ## Install
 ```sh
 npm i rsup-progress
+```
+```js
+import Progress from 'rsup-progress'
+```
+
+### UMD
+```html
+<script src="https://unpkg.com/rsup-progress"></script>
+<script>
+    const progress = new RsupProgress.default();
+</script>
+```
+
+### Browser ESM
+```html
+<script type="module">
+    import Progress from 'https://unpkg.com/rsup-progress/dist/index.js';
+    const progress = new Progress()
+</script>
 ```
 
 ## API
