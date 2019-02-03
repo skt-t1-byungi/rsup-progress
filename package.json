@@ -4,7 +4,9 @@
     "version": "0.0.1",
     "repository": "https://github.com/skt-t1-byungi/rsup-progress.git",
     "author": "skt-t1-byungi <tiniwz@gmail.com>",
-    "main": "dist/index.js",
+    "main": "dist/index.umd.js",
+    "unpkg": "dist/index.umd.js",
+    "module": "dist/index.js",
     "types": "dist/index.d.ts",
     "keywords": [
         "progress",
@@ -20,9 +22,10 @@
         "dev": "parcel website/index.html -d public",
         "test": "puppet-run src/test.ts",
         "build": "tsc",
-        "build:website": "parcel build website/index.html -d public --public-url ./  --no-source-maps",
-        "deploy": "rm -rf public && npm run build:website && gh-pages -d public",
-        "prepublishOnly": "npm run test && npm run build"
+        "umd": "rollup dist/index.js --file dist/index.umd.js --format umd --name RsupProgress",
+        "website": "parcel build website/index.html -d public --public-url ./  --no-source-maps",
+        "deploy": "rm -rf public && npm run website && gh-pages -d public",
+        "prepublishOnly": "npm run test && npm run build && npm run umd"
     },
     "engines": {
         "node": ">= 6"
@@ -33,6 +36,7 @@
         "gh-pages": "^2.0.1",
         "parcel-bundler": "^1.11.0",
         "puppet-run": "^0.4.0",
+        "rollup": "^1.1.2",
         "sass": "^1.16.1",
         "tape": "^4.9.2",
         "thejungle": "^0.4.2",
