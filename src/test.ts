@@ -101,16 +101,20 @@ test('Ignore promise that has not started.', t => {
     })
 })
 
-test.only('Without the promise delay argument, the progress bar should appear even if the promise ends prematurely.', t => {
-    const progress = new Progress({ className: 'bar', hideDuration: 100 })
+test('Without the promise delay argument, the progress bar should appear even if the promise ends prematurely.', t => {
+    const progress = new Progress({ className: 'bar', hideDuration: 50 })
     progress.promise(delay(0)).then(() => {
         t.ok($('.bar'))
         t.true(progress.isProgress)
 
-        delay(PERSIST_TIME + 100).then(() => {
-            t.notOk($('.bar'))
-            t.false(progress.isProgress)
-            t.end()
+        delay(PERSIST_TIME).then(() => {
+            t.is($('.bar').getBoundingClientRect().width, window.innerWidth) // 100%
+
+            delay(50).then(() => {
+                t.notOk($('.bar'))
+                t.false(progress.isProgress)
+                t.end()
+            })
         })
     })
 })

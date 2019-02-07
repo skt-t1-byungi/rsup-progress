@@ -85,6 +85,7 @@ export class Progress {
 
         this._nextTick(() => {
             this._nextTick(() => {
+                if (this._isHiding) return
                 this._css({ width: this._opts.maxWidth })
                 this._tickId = null
             })
