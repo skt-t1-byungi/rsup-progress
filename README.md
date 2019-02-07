@@ -96,7 +96,7 @@ console.log(progress.isProgress) // => true
 Start the progress bar.
 
 ### progress.end([immediately])
-Complete the progress bar. If immediately is true, remove the element immediately.
+Complete the progress bar. If `immediately` is true, remove the element immediately.
 
 ### progress.promise(promise[, delay])
 Call the start and end functions automatically by promise.

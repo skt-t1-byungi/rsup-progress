@@ -102,13 +102,13 @@ export class Progress {
         }
     }
 
-    public end (immediately = false) {
+    public end (immediately?: boolean) {
         this._clearPromise()
 
         if (this._isScheduled) this._isScheduled = false
         if (!this._isProgress || this._isHiding) return
 
-        if (this._tickId || immediately) {
+        if ((immediately === undefined && this._tickId) || immediately) {
             this._isProgress = false
             document.body.removeChild(this._el)
             if (this._tickId) this._clearTick()
@@ -161,7 +161,7 @@ export class Progress {
             ended = true
             if (started) {
                 this._clearPromise(promise)
-                if (this._promises.length === 0 && this._isProgress) this.end()
+                if (this._promises.length === 0 && this._isProgress) this.end(false)
             }
         }
 

@@ -10,7 +10,7 @@ const clear = () => (document.body.innerHTML = '')
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 const PERSIST_TIME = 150
 
-test('attach element', t => {
+test('attach element.', t => {
     const progress = new Progress({ className: 'bar' })
 
     t.notOk($('.bar'))
@@ -22,7 +22,7 @@ test('attach element', t => {
     clear(), t.end()
 })
 
-test('progress', t => {
+test('progress to reach maxWidth.', t => {
     const progress = new Progress({ className: 'bar', duration: 200, maxWidth: 100 })
     const getWidth = () => $('.bar').getBoundingClientRect().width
 
@@ -44,7 +44,7 @@ test('progress', t => {
     })
 })
 
-test('promise', t => {
+test('basic promise.', t => {
     const progress = new Progress({ hideDuration: 0 })
 
     progress.promise(delay(100))
@@ -56,7 +56,7 @@ test('promise', t => {
     })
 })
 
-test('promise # reject', t => {
+test('When rejected, the progress should be finalized.', t => {
     const progress = new Progress({ hideDuration: 0 })
 
     t.plan(3)
@@ -72,7 +72,7 @@ test('promise # reject', t => {
     })
 })
 
-test('promise # add When added midway', t => {
+test('When a new promise is added, it is completed when the last promise is over.', t => {
     t.plan(3)
     const progress = new Progress({ hideDuration: 0 })
 
@@ -98,5 +98,19 @@ test('Ignore promise that has not started.', t => {
     delay(150 + PERSIST_TIME).then(() => {
         t.false(progress.isProgress)
         t.end()
+    })
+})
+
+test.only('Without the promise delay argument, the progress bar should appear even if the promise ends prematurely.', t => {
+    const progress = new Progress({ className: 'bar', hideDuration: 100 })
+    progress.promise(delay(0)).then(() => {
+        t.ok($('.bar'))
+        t.true(progress.isProgress)
+
+        delay(PERSIST_TIME + 100).then(() => {
+            t.notOk($('.bar'))
+            t.false(progress.isProgress)
+            t.end()
+        })
     })
 })
