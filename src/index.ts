@@ -103,6 +103,7 @@ export class Progress {
         }
     }
 
+    // tslint:disable-next-line: bool-param-default
     public end (immediately?: boolean) {
         this._clearPromise()
 

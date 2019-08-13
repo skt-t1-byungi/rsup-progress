@@ -1,13 +1,23 @@
-import test from 'tape'
+// tslint:disable: no-floating-promises
+import tape from 'tape'
 import { Progress } from './index'
 
 declare const puppet: any
-test.onFinish(() => puppet.exit(0));
-(test as any).onFailure(() => puppet.exit(1))
+tape.onFinish(() => puppet.exit(0));
+(tape as any).onFailure(() => puppet.exit(1))
+
+const test = (name: string, tester: (t: any) => void) => tape(name, t => {
+    const tEnd = t.end
+    t.end = () => {
+        document.body.innerHTML = ''
+        return tEnd.call(t)
+    }
+    return tester(t)
+})
 
 const $ = (selector: string) => document.querySelector(selector)
-const clear = () => (document.body.innerHTML = '')
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
 const PERSIST_TIME = 150
 
 test('attach element.', t => {
@@ -19,7 +29,7 @@ test('attach element.', t => {
     progress.end()
     t.notOk($('.bar'))
 
-    clear(), t.end()
+    t.end()
 })
 
 test('progress to reach maxWidth.', t => {
@@ -38,7 +48,7 @@ test('progress to reach maxWidth.', t => {
 
             delay(50).then(() => {
                 t.is(getWidth(), 100)
-                clear(), t.end()
+                t.end()
             })
         })
     })
@@ -52,7 +62,7 @@ test('basic promise.', t => {
 
     delay(105 + PERSIST_TIME).then(() => {
         t.false(progress.isProgress)
-        clear(), t.end()
+        t.end()
     })
 })
 
@@ -68,7 +78,7 @@ test('When rejected, the progress should be finalized.', t => {
     const PERSIST_TIME = 150
     delay(105 + PERSIST_TIME).then(() => {
         t.false(progress.isProgress)
-        clear(), t.end()
+        t.end()
     })
 })
 
@@ -85,7 +95,7 @@ test('When a new promise is added, it is completed when the last promise is over
     delay(105 + PERSIST_TIME).then(() => t.ok(progress.isProgress))
     delay(185 + PERSIST_TIME).then(() => {
         t.notOk(progress.isProgress)
-        clear(), t.end()
+        t.end()
     })
 })
 
