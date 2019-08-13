@@ -21,7 +21,7 @@
     "scripts": {
         "dev": "parcel website/index.html -d public",
         "test": "puppet-run src/test.ts",
-        "build": "tsc",
+        "build": "rm -rf dist && tsc",
         "umd": "rollup dist/index.js --file dist/index.umd.js --format umd --name RsupProgress",
         "website": "parcel build website/index.html -d public --public-url ./  --no-source-maps",
         "deploy": "rm -rf public && npm run website && gh-pages -d public",
@@ -31,17 +31,17 @@
         "node": ">= 6"
     },
     "devDependencies": {
-        "@byungi/p-delay": "^0.0.3",
+        "@byungi/p-delay": "^0.1.2",
         "@types/tape": "^4.2.33",
-        "gh-pages": "^2.0.1",
-        "parcel-bundler": "^1.11.0",
-        "puppet-run": "^0.4.0",
-        "rollup": "^1.1.2",
-        "sass": "^1.16.1",
-        "tape": "^4.9.2",
-        "thejungle": "^0.4.2",
-        "tslint": "^5.12.1",
-        "tslint-config-byungi": "^0.1.0",
-        "typescript": "^3.2.4"
+        "gh-pages": "^2.1.1",
+        "parcel-bundler": "^1.12.3",
+        "puppet-run": "^0.5.0",
+        "rollup": "^1.19.4",
+        "sass": "^1.22.9",
+        "tape": "^4.11.0",
+        "thejungle": "^1.0.0",
+        "tslint": "^5.18.0",
+        "tslint-config-byungi": "^0.1.1",
+        "typescript": "^3.5.3"
     }
 }
