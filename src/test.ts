@@ -1,6 +1,6 @@
-// tslint:disable: no-floating-promises
 import tape from 'tape'
-import { Progress } from './index'
+
+import { Progress } from '.'
 
 declare const puppet: any
 tape.onFinish(() => puppet.exit(0));
@@ -41,7 +41,7 @@ test('progress to reach maxWidth.', t => {
 
     delay(100).then(() => {
         const w = getWidth()
-        t.true(0 < w && w < 100)
+        t.true(w > 0 && w < 100)
 
         delay(100).then(() => {
             t.is(getWidth(), 100)

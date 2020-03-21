@@ -1,23 +1,23 @@
 interface UserOptions {
-    maxWidth?: number | string
-    height?: number | string
-    duration?: number
-    hideDuration?: number
-    zIndex?: number | string
-    className?: string
-    color?: string
-    timing?: string
+    maxWidth?: number | string;
+    height?: number | string;
+    duration?: number;
+    hideDuration?: number;
+    zIndex?: number | string;
+    className?: string;
+    color?: string;
+    timing?: string;
 }
 
 interface Options {
-    maxWidth: string
-    height: string
-    duration: number
-    hideDuration: number
-    zIndex: string
-    className: string
-    color: string
-    timing: string
+    maxWidth: string;
+    height: string;
+    duration: number;
+    hideDuration: number;
+    zIndex: string;
+    className: string;
+    color: string;
+    timing: string;
 }
 
 export class Progress {
@@ -34,7 +34,7 @@ export class Progress {
         this.setOptions(userOpts)
     }
 
-    public setOptions (userOpts: UserOptions) {
+    setOptions (userOpts: UserOptions) {
         assertProp(userOpts, 'maxWidth', ['number', 'string'])
         assertProp(userOpts, 'height', ['number', 'string'])
         assertProp(userOpts, 'duration', 'number')
@@ -65,7 +65,7 @@ export class Progress {
         return this._isProgress
     }
 
-    public start () {
+    start () {
         if (this._isProgress) {
             if (this._isHiding) this._isScheduled = true
             return
@@ -103,8 +103,7 @@ export class Progress {
         }
     }
 
-    // tslint:disable-next-line: bool-param-default
-    public end (immediately?: boolean) {
+    end (immediately?: boolean) {
         this._clearPromise()
 
         if (this._isScheduled) this._isScheduled = false
@@ -141,7 +140,7 @@ export class Progress {
         }, this._opts.hideDuration + PERSIST_TIME)
     }
 
-    public promise<T> (promise: Promise<T>, delay = 0) {
+    promise<T> (promise: Promise<T>, delay = 0) {
         let started = false
         let ended = false
 
@@ -173,7 +172,7 @@ export class Progress {
         )
     }
 
-    private _clearPromise (promise ?: Promise<any>) {
+    private _clearPromise (promise?: Promise<any>) {
         this._promises = promise ? this._promises.filter(p => p !== promise) : []
     }
 }
@@ -199,7 +198,7 @@ function normalizeOptions (opts: UserOptions): Options {
     return opts as Options
 }
 
-function assign<T1,T2> (t: T1, src: T2): T1 & T2 {
+function assign<T1, T2> (t: T1, src: T2): T1 & T2 {
     for (const k in src) {
         if (Object.prototype.hasOwnProperty.call(src, k)) (t as any)[k] = src[k]
     }
