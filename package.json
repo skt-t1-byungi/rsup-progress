@@ -31,6 +31,7 @@
         "node": ">= 6"
     },
     "devDependencies": {
+        "@byungi/p-delay": "^0.2.0",
         "eslint": "^6.8.0",
         "eslint-config-byungi": "^0.8.1",
         "gh-pages": "^2.2.0",

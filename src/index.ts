@@ -20,13 +20,15 @@ interface Options {
     timing: string;
 }
 
+const PERSIST_TIME = 150
+
 export class Progress {
     private _el: HTMLDivElement
     private _opts!: Options
     private _isProgress = false
     private _isHiding = false
-    private _isScheduled = false
-    private _tickId: number | null = null
+    private _willRestart = false
+    private _rafId: number | null = null
     private _promises: Array<Promise<any>> = []
 
     constructor (userOpts: UserOptions = {}) {
@@ -67,7 +69,7 @@ export class Progress {
 
     start () {
         if (this._isProgress) {
-            if (this._isHiding) this._isScheduled = true
+            if (this._isHiding) this._willRestart = true
             return
         }
 
@@ -83,44 +85,41 @@ export class Progress {
 
         document.body.appendChild(this._el)
 
-        this._nextTick(() => {
-            this._nextTick(() => {
-                if (this._isHiding) return
-                this._css({ width: this._opts.maxWidth })
-                this._tickId = null
-            })
+        this._nextFrame(() => {
+            if (this._isHiding) return
+            this._css({ width: this._opts.maxWidth })
         })
     }
 
-    private _nextTick (fn: () => void) {
-        this._tickId = (requestAnimationFrame || setTimeout)(fn)
-    }
-
-    private _clearTick () {
-        if (this._tickId) {
-            (cancelAnimationFrame || clearTimeout)(this._tickId)
-            this._tickId = null
-        }
+    private _nextFrame (cb: () => void) {
+        this._rafId = requestAnimationFrame(() => (
+            this._rafId = requestAnimationFrame(() => {
+                this._rafId = null
+                cb()
+            })
+        ))
     }
 
     end (immediately?: boolean) {
-        this._clearPromise()
+        this._promises = []
 
-        if (this._isScheduled) this._isScheduled = false
-        if (!this._isProgress || this._isHiding) return
+        if (this._willRestart) this._willRestart = false
+        if (!this._isProgress || (this._isHiding && !immediately)) return
 
-        if ((immediately === undefined && this._tickId) || immediately) {
+        if (immediately || this._rafId) {
+            if (this._rafId) {
+                cancelAnimationFrame(this._rafId)
+                this._rafId = null
+            }
+
             this._isProgress = false
-            document.body.removeChild(this._el)
-            if (this._tickId) this._clearTick()
-            return
+            this._isHiding = false
+            return void document.body.removeChild(this._el)
         }
 
         this._isHiding = true
 
-        const PERSIST_TIME = 150
         const transition = `width 50ms, opacity ${this._opts.hideDuration}ms ${PERSIST_TIME}ms`
-
         this._css({
             width: '100%',
             opacity: '0',
@@ -129,51 +128,52 @@ export class Progress {
         })
 
         setTimeout(() => {
+            if (!this._isHiding) return
+
             this._isHiding = false
             this._isProgress = false
             document.body.removeChild(this._el)
 
-            if (this._isScheduled) {
-                this._isScheduled = false
+            if (this._willRestart) {
+                this._willRestart = false
                 this.start()
             }
         }, this._opts.hideDuration + PERSIST_TIME)
     }
 
     promise<T> (promise: Promise<T>, delay = 0) {
-        let started = false
-        let ended = false
+        let timerId: number | null = null
 
         const start = () => {
-            started = true
+            timerId = null
             this._promises.push(promise)
             this.start()
         }
 
         if (delay > 0) {
-            setTimeout(() => {
-                if (!ended) start()
-            }, delay)
+            timerId = setTimeout(start, delay)
         } else {
             start()
         }
 
         const onFinally = () => {
-            ended = true
-            if (started) {
-                this._clearPromise(promise)
-                if (this._promises.length === 0 && this._isProgress) this.end(false)
+            if (timerId) {
+                return void clearTimeout(timerId)
+            }
+
+            const promises = this._promises
+            const idx = promises.indexOf(promise)
+
+            if (idx > -1) {
+                promises.splice(idx, 1)
+                if (promises.length === 0) this.end()
             }
         }
 
         return promise.then(
-            val => (onFinally(), val),
+            v => (onFinally(), v),
             err => (onFinally(), Promise.reject(err))
         )
-    }
-
-    private _clearPromise (promise?: Promise<any>) {
-        this._promises = promise ? this._promises.filter(p => p !== promise) : []
     }
 }
 
@@ -205,8 +205,8 @@ function assign<T1, T2> (t: T1, src: T2): T1 & T2 {
     return t as T1 & T2
 }
 
-function assertProp (obj: any, prop: string, expected: string | string[]) {
-    const type = typeof obj[prop]
+function assertProp (o: any, prop: string, expected: string | string[]) {
+    const type = typeof o[prop]
     if (type === 'undefined') return
     if (typeof expected === 'string') expected = [expected]
     if (expected.indexOf(type) > -1) return
