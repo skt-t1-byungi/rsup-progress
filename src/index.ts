@@ -87,10 +87,7 @@ class Progress {
 
         document.body.appendChild(this._el)
 
-        this._nextFrame(() => {
-            if (this._isHiding) return
-            this._css({ width: this._opts.maxWidth })
-        })
+        this._nextFrame(() => this._css({ width: this._opts.maxWidth }))
     }
 
     private _nextFrame (cb: () => void) {
@@ -162,10 +159,8 @@ class Progress {
             if (timerId) {
                 return void clearTimeout(timerId)
             }
-
             const promises = this._promises
             const idx = promises.indexOf(promise)
-
             if (idx > -1) {
                 promises.splice(idx, 1)
                 if (promises.length === 0) this.end()
