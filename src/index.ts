@@ -22,7 +22,9 @@ interface Options {
 
 const PERSIST_TIME = 150
 
-export class Progress {
+class Progress {
+    static default = Progress // for compatibility
+
     private _el: HTMLDivElement
     private _opts!: Options
     private _isProgress = false

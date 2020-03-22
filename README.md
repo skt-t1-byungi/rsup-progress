@@ -41,7 +41,7 @@ import Progress from 'rsup-progress'
 ```html
 <script src="https://unpkg.com/rsup-progress"></script>
 <script>
-    const progress = new RsupProgress.default();
+    const progress = new RsupProgress();
 </script>
 ```
 
