@@ -5,7 +5,7 @@
         "lib": ["dom", "es2015"],
         "declaration": true,
         "outDir": "./dist",
-        "strict": true,
+        "strict": true
     },
     "include": [
         "src/index.ts"
