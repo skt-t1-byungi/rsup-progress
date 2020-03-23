@@ -1,6 +1,6 @@
 {
     "name": "rsup-progress",
-    "description": "A simple progress bar that supports promise.",
+    "description": "A tiny progress bar that supports promise (1.2kb)",
     "version": "1.2.0",
     "repository": "https://github.com/skt-t1-byungi/rsup-progress.git",
     "author": "skt-t1-byungi <tiniwz@gmail.com>",
@@ -12,7 +12,8 @@
         "progress",
         "progressbar",
         "loader",
-        "promise"
+        "promise",
+        "1kb"
     ],
     "files": [
         "dist"
@@ -25,7 +26,8 @@
         "umd": "rollup dist/index.js --file dist/index.umd.js --format umd --name RsupProgress",
         "website": "parcel build website/index.html -d public --public-url ./  --no-source-maps",
         "deploy": "rm -rf public && npm run website && gh-pages -d public",
-        "prepublishOnly": "npm run test && npm run build && npm run umd"
+        "prepublishOnly": "npm run test && npm run size && npm run umd",
+        "size": "npm run build && package-size ./dist/index.js --no-cache"
     },
     "engines": {
         "node": ">= 6"
@@ -35,6 +37,7 @@
         "eslint": "^6.8.0",
         "eslint-config-byungi": "^0.8.1",
         "gh-pages": "^2.2.0",
+        "package-size": "^2.3.0",
         "parcel-bundler": "^1.12.4",
         "rollup": "^2.1.0",
         "sass": "^1.26.3",

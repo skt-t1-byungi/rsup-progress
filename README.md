@@ -3,14 +3,15 @@
 </div>
 <br><br>
 
-> A simple progress bar that supports promise.
+> A tiny progress bar that supports promise (1.2kb)
 
 [![npm](https://flat.badgen.net/npm/v/rsup-progress)](https://www.npmjs.com/package/rsup-progress)
+[![npm](https://flat.badgen.net/bundlephobia/minzip/rsup-progress)](https://bundlephobia.com/result?p=rsup-progress)
 [![npm](https://flat.badgen.net/npm/license/rsup-progress)](https://github.com/skt-t1-byungi/rsup-progress/blob/master/LICENSE)
 
-
-Progress bar speed is fast at first, but it slows down and does not end. Call the `end` function to complete.<br>
-Users experience interaction with smooth animation without progress information.
+The progress bar is initially fast, but doesn't end as it slows down.
+Call the `end` function to complete. <br>
+This gives you a natural animation without the exact percentage of progress.
 
 https://skt-t1-byungi.github.io/rsup-progress/
 
@@ -69,9 +70,9 @@ const progress = new Progress({
 - `duration` - Duration time to reach maxWidth. Default is `60000`(ms).
 - `hideDuration` - Duration time to hide when completion. Default is `400`(ms).
 - `zIndex` - CSS z-index property. Default is `9999`.
-- `className` - Progress bar className attribute.
+- `className` - Progress bar `class` attribute.
 - `color` - Progress bar color. Default is `#ff1a59`.
-- `timing` - Animation timing function. Default is `cubic-bezier(0,1,0,1)`.
+- `timing` - CSS animation timing function. Default is `cubic-bezier(0,1,0,1)`.
 
 ### promise.setOptions(options)
 Change options.

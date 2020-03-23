@@ -157,11 +157,11 @@ class Progress {
 
         const onFinally = () => {
             if (timerId) {
-                return void clearTimeout(timerId)
+                return clearTimeout(timerId)
             }
             const promises = this._promises
             const idx = promises.indexOf(promise)
-            if (idx > -1) {
+            if (~idx) {
                 promises.splice(idx, 1)
                 if (promises.length === 0) this.end()
             }
@@ -206,7 +206,7 @@ function assertProp (o: any, prop: string, expected: string | string[]) {
     const type = typeof o[prop]
     if (type === 'undefined') return
     if (typeof expected === 'string') expected = [expected]
-    if (expected.indexOf(type) > -1) return
+    if (~expected.indexOf(type)) return
 
-    throw new TypeError(`[rsup-progress] Expected \`${prop}\` to be of type ${expected.join(', ')}, but "${type}".`)
+    throw new TypeError(`Expected \`${prop}\` to be of type ${expected.join(', ')}, but "${type}".`)
 }
