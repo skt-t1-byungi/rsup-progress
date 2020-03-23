@@ -1,7 +1,7 @@
 {
     "name": "rsup-progress",
     "description": "A tiny progress bar that supports promise (1.2kb)",
-    "version": "1.2.0",
+    "version": "1.2.1",
     "repository": "https://github.com/skt-t1-byungi/rsup-progress.git",
     "author": "skt-t1-byungi <tiniwz@gmail.com>",
     "main": "dist/index.umd.js",
