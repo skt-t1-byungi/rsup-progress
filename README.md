@@ -116,6 +116,7 @@ If the promise ends before the delay, the progress bar will not start.
 progress.promise(delay(500), 600) // => Progress bar does not appear.
 ```
 
+It is useful when avoiding the progressbar flash that occurs when the promise is short.
 
 
 ## License
