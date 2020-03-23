@@ -74,7 +74,7 @@ const progress = new Progress({
 - `color` - Progress bar color. Default is `#ff1a59`.
 - `timing` - CSS animation timing function. Default is `cubic-bezier(0,1,0,1)`.
 
-### promise.setOptions(options)
+### progress.setOptions(options)
 Change options.
 ```js
 progress.setOptions({
@@ -83,7 +83,7 @@ progress.setOptions({
 })
 ```
 
-### promise.isProgress
+### progress.isInProgress
 Returns whether it is in progress or not.
 ```js
 console.log(progress.isProgress) // => false
