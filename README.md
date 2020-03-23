@@ -86,11 +86,11 @@ progress.setOptions({
 ### progress.isInProgress
 Returns whether it is in progress or not.
 ```js
-console.log(progress.isProgress) // => false
+console.log(progress.isInProgress) // => false
 
 progress.start()
 
-console.log(progress.isProgress) // => true
+console.log(progress.isInProgress) // => true
 ```
 
 ### progress.start()
