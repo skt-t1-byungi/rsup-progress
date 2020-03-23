@@ -27,7 +27,7 @@ class Progress {
 
     private _el: HTMLDivElement
     private _opts!: Options
-    private _isProgress = false
+    private _isInProgress = false
     private _isHiding = false
     private _willRestart = false
     private _rafId: number | null = null
@@ -65,17 +65,24 @@ class Progress {
         assign(this._el.style, style)
     }
 
+    /**
+     * @deprecated
+     */
     get isProgress () {
-        return this._isProgress
+        return this._isInProgress
+    }
+
+    get isInProgress () {
+        return this._isInProgress
     }
 
     start () {
-        if (this._isProgress) {
+        if (this._isInProgress) {
             if (this._isHiding) this._willRestart = true
             return
         }
 
-        this._isProgress = true
+        this._isInProgress = true
 
         const transition = `width ${this._opts.duration}ms ${this._opts.timing}`
         this._css({
@@ -103,7 +110,7 @@ class Progress {
         this._promises = []
 
         if (this._willRestart) this._willRestart = false
-        if (!this._isProgress || (this._isHiding && !immediately)) return
+        if (!this._isInProgress || (this._isHiding && !immediately)) return
 
         if (immediately || this._rafId) {
             if (this._rafId) {
@@ -111,7 +118,7 @@ class Progress {
                 this._rafId = null
             }
 
-            this._isProgress = false
+            this._isInProgress = false
             this._isHiding = false
             return void document.body.removeChild(this._el)
         }
@@ -130,7 +137,7 @@ class Progress {
             if (!this._isHiding) return
 
             this._isHiding = false
-            this._isProgress = false
+            this._isInProgress = false
             document.body.removeChild(this._el)
 
             if (this._willRestart) {
