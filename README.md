@@ -11,7 +11,7 @@
 
 The progress bar is initially fast, but doesn't end as it slows down.
 Call the `end` function to complete. <br>
-This gives you a natural animation without the exact percentage of progress.
+This gives users a natural animation without the exact percentage of progress.
 
 https://skt-t1-byungi.github.io/rsup-progress/
 
