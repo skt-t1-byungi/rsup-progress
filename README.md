@@ -118,6 +118,16 @@ progress.promise(delay(500), 600) // => Progress bar does not appear.
 
 It is useful when avoiding the progressbar flash that occurs when the promise is short.
 
+## Tips
+### Force the Progressbar animation.
+If you call the end function before the animation starts, the progressbar does not appear.
+The animation can be forced with the following trick.
+
+```js
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+progress.promise(Promise.all([yourPromise, delay(100)])) // => `delay(100)` prevents a quick end.
+```
 
 ## License
 MIT License ❤️📝 skt-t1-byungi
