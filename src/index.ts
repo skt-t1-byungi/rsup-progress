@@ -67,7 +67,6 @@ class Progress {
             background: opts.color,
             zIndex: opts.zIndex
         })
-
         this._css(opts.position === 'none' ? {
             position: '',
             left: '',
@@ -238,7 +237,6 @@ function assertPropType (o: any, prop: string, expected: string | string[]) {
     if (type === 'undefined') return
     if (typeof expected === 'string') expected = [expected]
     if (~expected.indexOf(type)) return
-
     throw new TypeError(`Expected "${prop}" to be of type [${expected.join('|')}], but "${type}".`)
 }
 
