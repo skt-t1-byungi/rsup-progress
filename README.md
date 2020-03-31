@@ -3,7 +3,7 @@
 </div>
 <br><br>
 
-> A tiny progress bar that supports promise (1.2kb)
+> A tiny progress bar that supports promise (1.3kb)
 
 [![npm](https://flat.badgen.net/npm/v/rsup-progress)](https://www.npmjs.com/package/rsup-progress)
 [![npm](https://flat.badgen.net/bundlephobia/minzip/rsup-progress)](https://bundlephobia.com/result?p=rsup-progress)
