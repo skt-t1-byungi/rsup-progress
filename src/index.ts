@@ -68,13 +68,17 @@ class Progress {
             zIndex: opts.zIndex
         })
 
-        if (opts.position !== 'none') {
-            this._css({
-                position: 'fixed',
-                left: '0',
-                [opts.position]: '0'
-            })
-        }
+        this._css(opts.position === 'none' ? {
+            position: '',
+            left: '',
+            top: '',
+            bottom: ''
+        } : {
+            position: 'fixed',
+            left: '0',
+            top: opts.position === 'top' ? '0' : '',
+            bottom: opts.position === 'bottom' ? '0' : ''
+        })
     }
 
     private _css (style: Partial<CSSStyleDeclaration>) {
