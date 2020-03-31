@@ -53,7 +53,7 @@ class Progress {
         assertPropType(userOpts, 'timing', 'string')
 
         if (userOpts.position && !~['top', 'bottom', 'none'].indexOf(userOpts.position)) {
-            throw new TypeError(`Expected "position" to be [top|bottom], but "${userOpts.position}".`)
+            throw new TypeError(`Expected "position" to be [top|bottom|none], but "${userOpts.position}".`)
         }
         if (userOpts.container && !(userOpts.container instanceof HTMLElement)) {
             throw new TypeError('Expected "container" to be [HTMLElement] type.')
@@ -68,7 +68,7 @@ class Progress {
             zIndex: opts.zIndex
         })
 
-        if (userOpts.position !== 'none') {
+        if (opts.position !== 'none') {
             this._css({
                 position: 'fixed',
                 left: '0',
