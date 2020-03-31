@@ -65,6 +65,8 @@ const progress = new Progress({
 ```
 
 #### options
+- `container` - Container element to append a progress bar. Default is `document.body`.
+- `position` - Position to be placed. Default is `top` (There are `top`, `bottom`, `none`).
 - `maxWidth` - Maximum width before completion. Default is `99.8%`.
 - `height` - Progress bar height. Default is `4px`.
 - `duration` - Duration time to reach maxWidth. Default is `60000`(ms).

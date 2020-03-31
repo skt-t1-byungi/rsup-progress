@@ -7,6 +7,8 @@ interface UserOptions {
     className?: string;
     color?: string;
     timing?: string;
+    position?: 'top' | 'bottom' | 'none';
+    container?: HTMLElement;
 }
 
 interface Options {
@@ -18,6 +20,8 @@ interface Options {
     className: string;
     color: string;
     timing: string;
+    position: 'top' | 'bottom' | 'none';
+    container: HTMLElement;
 }
 
 const PERSIST_TIME = 150
@@ -39,26 +43,38 @@ class Progress {
     }
 
     setOptions (userOpts: UserOptions) {
-        assertProp(userOpts, 'maxWidth', ['number', 'string'])
-        assertProp(userOpts, 'height', ['number', 'string'])
-        assertProp(userOpts, 'duration', 'number')
-        assertProp(userOpts, 'hideDuration', 'number')
-        assertProp(userOpts, 'zIndex', ['number', 'string'])
-        assertProp(userOpts, 'className', 'string')
-        assertProp(userOpts, 'color', 'string')
-        assertProp(userOpts, 'timing', 'string')
+        assertPropType(userOpts, 'maxWidth', ['number', 'string'])
+        assertPropType(userOpts, 'height', ['number', 'string'])
+        assertPropType(userOpts, 'duration', 'number')
+        assertPropType(userOpts, 'hideDuration', 'number')
+        assertPropType(userOpts, 'zIndex', ['number', 'string'])
+        assertPropType(userOpts, 'className', 'string')
+        assertPropType(userOpts, 'color', 'string')
+        assertPropType(userOpts, 'timing', 'string')
+
+        if (userOpts.position && !~['top', 'bottom', 'none'].indexOf(userOpts.position)) {
+            throw new TypeError(`Expected "position" to be [top|bottom], but "${userOpts.position}".`)
+        }
+        if (userOpts.container && !(userOpts.container instanceof HTMLElement)) {
+            throw new TypeError('Expected "container" to be [HTMLElement] type.')
+        }
 
         const opts = this._opts = normalizeOptions(userOpts)
 
         this._el.className = opts.className
         this._css({
-            position: 'fixed',
-            zIndex: opts.zIndex,
-            top: '0',
-            left: '0',
             height: opts.height,
-            background: opts.color
+            background: opts.color,
+            zIndex: opts.zIndex
         })
+
+        if (userOpts.position !== 'none') {
+            this._css({
+                position: 'fixed',
+                left: '0',
+                [opts.position]: '0'
+            })
+        }
     }
 
     private _css (style: Partial<CSSStyleDeclaration>) {
@@ -92,7 +108,7 @@ class Progress {
             webkitTransition: transition
         })
 
-        document.body.appendChild(this._el)
+        this._opts.container.appendChild(this._el)
 
         this._nextFrame(() => this._css({ width: this._opts.maxWidth }))
     }
@@ -120,7 +136,8 @@ class Progress {
 
             this._isInProgress = false
             this._isHiding = false
-            return void document.body.removeChild(this._el)
+
+            return detach(this._el)
         }
 
         this._isHiding = true
@@ -138,7 +155,8 @@ class Progress {
 
             this._isHiding = false
             this._isInProgress = false
-            document.body.removeChild(this._el)
+
+            detach(this._el)
 
             if (this._willRestart) {
                 this._willRestart = false
@@ -192,7 +210,9 @@ function normalizeOptions (opts: UserOptions): Options {
         zIndex: '9999',
         color: '#ff1a59',
         className: '',
-        timing: 'cubic-bezier(0,1,0,1)'
+        timing: 'cubic-bezier(0,1,0,1)',
+        position: 'top',
+        container: document.body
     }, opts)
 
     if (typeof opts.maxWidth === 'number') opts.maxWidth = opts.maxWidth + 'px'
@@ -209,11 +229,15 @@ function assign<T1, T2> (t: T1, src: T2): T1 & T2 {
     return t as T1 & T2
 }
 
-function assertProp (o: any, prop: string, expected: string | string[]) {
+function assertPropType (o: any, prop: string, expected: string | string[]) {
     const type = typeof o[prop]
     if (type === 'undefined') return
     if (typeof expected === 'string') expected = [expected]
     if (~expected.indexOf(type)) return
 
-    throw new TypeError(`Expected \`${prop}\` to be of type ${expected.join(', ')}, but "${type}".`)
+    throw new TypeError(`Expected "${prop}" to be of type [${expected.join('|')}], but "${type}".`)
+}
+
+function detach (el: HTMLElement) {
+    if (el.parentNode) el.parentNode.removeChild(el)
 }
