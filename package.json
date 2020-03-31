@@ -35,11 +35,11 @@
     "devDependencies": {
         "@byungi/p-delay": "^0.2.0",
         "eslint": "^6.8.0",
-        "eslint-config-byungi": "^0.8.1",
+        "eslint-config-byungi": "^0.10.3",
         "gh-pages": "^2.2.0",
         "package-size": "^2.3.0",
         "parcel-bundler": "^1.12.4",
-        "rollup": "^2.1.0",
+        "rollup": "^2.3.1",
         "sass": "^1.26.3",
         "thejungle": "^1.0.2",
         "typescript": "^3.8.3"
