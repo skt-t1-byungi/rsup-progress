@@ -1,6 +1,6 @@
 {
     "name": "rsup-progress",
-    "description": "A simple progress bar with promises support (1.3kb)",
+    "description": "A simple progress bar with promises support",
     "version": "1.4.0",
     "repository": "https://github.com/skt-t1-byungi/rsup-progress.git",
     "author": "skt-t1-byungi <tiniwz@gmail.com>",
