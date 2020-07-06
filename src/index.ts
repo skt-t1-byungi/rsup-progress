@@ -1,4 +1,4 @@
-interface UserOptions {
+interface UserOptions{
     maxWidth?: number | string;
     height?: number | string;
     duration?: number;
@@ -117,12 +117,12 @@ class Progress {
     }
 
     private _nextFrame (cb: () => void) {
-        this._rafId = requestAnimationFrame(() => (
+        this._rafId = requestAnimationFrame(() => {
             this._rafId = requestAnimationFrame(() => {
                 this._rafId = null
                 cb()
             })
-        ))
+        })
     }
 
     end (immediately?: boolean) {
