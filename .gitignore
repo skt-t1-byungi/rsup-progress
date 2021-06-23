@@ -5,3 +5,4 @@ gh-pages/
 .cache/
 *.log
 *.lock
+pnpm-lock.yaml

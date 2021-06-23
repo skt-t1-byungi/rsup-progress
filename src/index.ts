@@ -1,27 +1,27 @@
-interface UserOptions{
-    maxWidth?: number | string;
-    height?: number | string;
-    duration?: number;
-    hideDuration?: number;
-    zIndex?: number | string;
-    className?: string;
-    color?: string;
-    timing?: string;
-    position?: 'top' | 'bottom' | 'none';
-    container?: HTMLElement;
+interface UserOptions {
+    maxWidth?: number | string
+    height?: number | string
+    duration?: number
+    hideDuration?: number
+    zIndex?: number | string
+    className?: string
+    color?: string
+    timing?: string
+    position?: 'top' | 'bottom' | 'none'
+    container?: HTMLElement
 }
 
 interface Options {
-    maxWidth: string;
-    height: string;
-    duration: number;
-    hideDuration: number;
-    zIndex: string;
-    className: string;
-    color: string;
-    timing: string;
-    position: 'top' | 'bottom' | 'none';
-    container: HTMLElement;
+    maxWidth: string
+    height: string
+    duration: number
+    hideDuration: number
+    zIndex: string
+    className: string
+    color: string
+    timing: string
+    position: 'top' | 'bottom' | 'none'
+    container: HTMLElement
 }
 
 const PERSIST_TIME = 150
@@ -37,12 +37,12 @@ class Progress {
     private _rafId: number | null = null
     private _promises: Array<Promise<any>> = []
 
-    constructor (userOpts: UserOptions = {}) {
+    constructor(userOpts: UserOptions = {}) {
         this._el = document.createElement('div')
         this.setOptions(userOpts)
     }
 
-    setOptions (userOpts: UserOptions) {
+    setOptions(userOpts: UserOptions) {
         assertPropType(userOpts, 'maxWidth', ['number', 'string'])
         assertPropType(userOpts, 'height', ['number', 'string'])
         assertPropType(userOpts, 'duration', 'number')
@@ -59,43 +59,47 @@ class Progress {
             throw new TypeError('Expected "container" to be [HTMLElement] type.')
         }
 
-        const opts = this._opts = normalizeOptions(userOpts)
+        const opts = (this._opts = normalizeOptions(userOpts))
 
         this._el.className = opts.className
         this._css({
             height: opts.height,
             background: opts.color,
-            zIndex: opts.zIndex
+            zIndex: opts.zIndex,
         })
-        this._css(opts.position === 'none' ? {
-            position: '',
-            left: '',
-            top: '',
-            bottom: ''
-        } : {
-            position: 'fixed',
-            left: '0',
-            top: opts.position === 'top' ? '0' : '',
-            bottom: opts.position === 'bottom' ? '0' : ''
-        })
+        this._css(
+            opts.position === 'none'
+                ? {
+                      position: '',
+                      left: '',
+                      top: '',
+                      bottom: '',
+                  }
+                : {
+                      position: 'fixed',
+                      left: '0',
+                      top: opts.position === 'top' ? '0' : '',
+                      bottom: opts.position === 'bottom' ? '0' : '',
+                  }
+        )
     }
 
-    private _css (style: Partial<CSSStyleDeclaration>) {
+    private _css(style: Partial<CSSStyleDeclaration>) {
         assign(this._el.style, style)
     }
 
     /**
      * @deprecated
      */
-    get isProgress () {
+    get isProgress() {
         return this._isInProgress
     }
 
-    get isInProgress () {
+    get isInProgress() {
         return this._isInProgress
     }
 
-    start () {
+    start() {
         if (this._isInProgress) {
             if (this._isHiding) this._willRestart = true
             return
@@ -108,7 +112,7 @@ class Progress {
             width: '0',
             opacity: '1',
             transition,
-            webkitTransition: transition
+            webkitTransition: transition,
         })
 
         this._opts.container.appendChild(this._el)
@@ -116,7 +120,7 @@ class Progress {
         this._nextFrame(() => this._css({ width: this._opts.maxWidth }))
     }
 
-    private _nextFrame (cb: () => void) {
+    private _nextFrame(cb: () => void) {
         this._rafId = requestAnimationFrame(() => {
             this._rafId = requestAnimationFrame(() => {
                 this._rafId = null
@@ -125,7 +129,7 @@ class Progress {
         })
     }
 
-    end (immediately?: boolean) {
+    end(immediately?: boolean) {
         this._promises = []
 
         if (this._willRestart) this._willRestart = false
@@ -150,7 +154,7 @@ class Progress {
             width: '100%',
             opacity: '0',
             transition,
-            webkitTransition: transition
+            webkitTransition: transition,
         })
 
         setTimeout(() => {
@@ -168,7 +172,7 @@ class Progress {
         }, this._opts.hideDuration + PERSIST_TIME)
     }
 
-    promise<T> (promise: Promise<T>, delay = 0) {
+    promise<T>(promise: Promise<T>, delay = 0) {
         let timerId: number | null = null
 
         const start = () => {
@@ -204,19 +208,22 @@ class Progress {
 
 export default Progress
 
-function normalizeOptions (opts: UserOptions): Options {
-    opts = assign({
-        maxWidth: '99.8%',
-        height: '4px',
-        duration: 60000,
-        hideDuration: 400,
-        zIndex: '9999',
-        color: '#ff1a59',
-        className: '',
-        timing: 'cubic-bezier(0,1,0,1)',
-        position: 'top',
-        container: document.body
-    }, opts)
+function normalizeOptions(opts: UserOptions): Options {
+    opts = assign(
+        {
+            maxWidth: '99.8%',
+            height: '4px',
+            duration: 60000,
+            hideDuration: 400,
+            zIndex: '9999',
+            color: '#ff1a59',
+            className: '',
+            timing: 'cubic-bezier(0,1,0,1)',
+            position: 'top',
+            container: document.body,
+        },
+        opts
+    )
 
     if (typeof opts.maxWidth === 'number') opts.maxWidth = opts.maxWidth + 'px'
     if (typeof opts.height === 'number') opts.height = opts.height + 'px'
@@ -225,14 +232,14 @@ function normalizeOptions (opts: UserOptions): Options {
     return opts as Options
 }
 
-function assign<T1, T2> (t: T1, src: T2): T1 & T2 {
+function assign<T1, T2>(t: T1, src: T2): T1 & T2 {
     for (const k in src) {
         if (Object.prototype.hasOwnProperty.call(src, k)) (t as any)[k] = src[k]
     }
     return t as T1 & T2
 }
 
-function assertPropType (o: any, prop: string, expected: string | string[]) {
+function assertPropType(o: any, prop: string, expected: string | string[]) {
     const type = typeof o[prop]
     if (type === 'undefined') return
     if (typeof expected === 'string') expected = [expected]
@@ -240,6 +247,6 @@ function assertPropType (o: any, prop: string, expected: string | string[]) {
     throw new TypeError(`Expected "${prop}" to be of type [${expected.join('|')}], but "${type}".`)
 }
 
-function detach (el: HTMLElement) {
+function detach(el: HTMLElement) {
     if (el.parentNode) el.parentNode.removeChild(el)
 }

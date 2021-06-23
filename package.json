@@ -34,20 +34,20 @@
     },
     "devDependencies": {
         "@byungi/p-delay": "^0.2.0",
-        "eslint": "^7.4.0",
-        "eslint-config-byungi": "^0.12.4",
         "gh-pages": "^3.1.0",
         "package-size": "^2.3.0",
         "parcel-bundler": "^1.12.4",
+        "prettier": "^2.3.1",
         "rollup": "^2.19.0",
         "sass": "^1.26.9",
         "thejungle": "^1.0.4",
         "typescript": "^3.9.6"
     },
-    "eslintConfig": {
-        "extends": "byungi/typescript"
-    },
-    "eslintIgnore": [
-        "dist"
-    ]
+    "prettier": {
+        "arrowParens": "avoid",
+        "semi": false,
+        "singleQuote": true,
+        "printWidth": 120,
+        "tabWidth": 4
+    }
 }
