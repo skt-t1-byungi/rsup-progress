@@ -26,10 +26,8 @@ interface Options {
 
 const PERSIST_TIME = 150
 
-class Progress {
-    static default = Progress // for compatibility
-
-    private _el: HTMLDivElement
+export default class Progress {
+    private _el = document.createElement('div')
     private _opts!: Options
     private _isInProgress = false
     private _isHiding = false
@@ -38,20 +36,10 @@ class Progress {
     private _promises: Array<Promise<any>> = []
 
     constructor(userOpts: UserOptions = {}) {
-        this._el = document.createElement('div')
         this.setOptions(userOpts)
     }
 
     setOptions(userOpts: UserOptions) {
-        assertPropType(userOpts, 'maxWidth', ['number', 'string'])
-        assertPropType(userOpts, 'height', ['number', 'string'])
-        assertPropType(userOpts, 'duration', 'number')
-        assertPropType(userOpts, 'hideDuration', 'number')
-        assertPropType(userOpts, 'zIndex', ['number', 'string'])
-        assertPropType(userOpts, 'className', 'string')
-        assertPropType(userOpts, 'color', 'string')
-        assertPropType(userOpts, 'timing', 'string')
-
         if (userOpts.position && !~['top', 'bottom', 'none'].indexOf(userOpts.position)) {
             throw new TypeError(`Expected "position" to be [top|bottom|none], but "${userOpts.position}".`)
         }
@@ -86,13 +74,6 @@ class Progress {
 
     private _css(style: Partial<CSSStyleDeclaration>) {
         assign(this._el.style, style)
-    }
-
-    /**
-     * @deprecated
-     */
-    get isProgress() {
-        return this._isInProgress
     }
 
     get isInProgress() {
@@ -206,8 +187,6 @@ class Progress {
     }
 }
 
-export default Progress
-
 function normalizeOptions(opts: UserOptions): Options {
     opts = assign(
         {
@@ -232,19 +211,11 @@ function normalizeOptions(opts: UserOptions): Options {
     return opts as Options
 }
 
-function assign<T1, T2>(t: T1, src: T2): T1 & T2 {
+function assign<T1, T2>(target: T1, src: T2): T1 & T2 {
     for (const k in src) {
-        if (Object.prototype.hasOwnProperty.call(src, k)) (t as any)[k] = src[k]
+        if (Object.prototype.hasOwnProperty.call(src, k)) (target as any)[k] = src[k]
     }
-    return t as T1 & T2
-}
-
-function assertPropType(o: any, prop: string, expected: string | string[]) {
-    const type = typeof o[prop]
-    if (type === 'undefined') return
-    if (typeof expected === 'string') expected = [expected]
-    if (~expected.indexOf(type)) return
-    throw new TypeError(`Expected "${prop}" to be of type [${expected.join('|')}], but "${type}".`)
+    return target as T1 & T2
 }
 
 function detach(el: HTMLElement) {
