@@ -108,7 +108,7 @@ const response = await progress.promise(fetch('/data.json'))
 ```
 
 #### options.min
-The minimum time that progressbar is shown and maintained. Default is `100`ms. If `0` is given and promise is already resolved, the progressbar does not appear.
+Minimum time to show and maintain the progressbar. Default is `100`ms. If `0` is given and promise is already resolved, the progressbar does not appear.
 
 ```js
 progress.promise(Promise.resolve(), { min: 0 }) // => Progress bar does not appear.
