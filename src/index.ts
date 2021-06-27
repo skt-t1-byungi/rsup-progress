@@ -169,13 +169,12 @@ export default class Progress {
     }
 
     promise<T>(p: Promise<T>, { delay = 0, min = 100 } = {}) {
-        if (min > 0) {
-            p = Promise.all([p, new Promise(res => setTimeout(res, min))]).then(([v]) => v)
-        }
-
         let timerId: ReturnType<typeof setTimeout> | null
 
         const start = () => {
+            if (min > 0) {
+                p = Promise.all([p, new Promise(res => setTimeout(res, min))]).then(([v]) => v)
+            }
             this._promises.push(p)
             this.start()
         }
