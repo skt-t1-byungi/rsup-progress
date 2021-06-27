@@ -36,8 +36,8 @@ export default class Progress {
         position: 'top',
         container: document.body,
     }
-    private _appearRaf: number | null = null
-    private _disappearTimer: ReturnType<typeof setTimeout> | null = null
+    private _rafId: number | null = null
+    private _timerId: ReturnType<typeof setTimeout> | null = null
     private _promises: Promise<any>[] = []
 
     constructor(opts: Options = {}) {
@@ -104,9 +104,9 @@ export default class Progress {
         })
         opts.container.appendChild(this._el)
 
-        this._appearRaf = requestAnimationFrame(() => {
-            this._appearRaf = requestAnimationFrame(() => {
-                this._appearRaf = null
+        this._rafId = requestAnimationFrame(() => {
+            this._rafId = requestAnimationFrame(() => {
+                this._rafId = null
                 this._state = STATE.PENDING
                 this._css({ width: this._opts.maxWidth })
             })
@@ -121,16 +121,16 @@ export default class Progress {
                 return
             case STATE.APPEAR:
                 this._state = STATE.NOTING
-                cancelAnimationFrame(this._appearRaf!)
-                this._appearRaf = null
+                cancelAnimationFrame(this._rafId!)
+                this._rafId = null
                 detach(this._el)
                 return
             case STATE.DISAPPEAR:
             case STATE.DISAPPEAR_RESTART:
                 if (immediately) {
                     this._state = STATE.NOTING
-                    clearTimeout(this._disappearTimer!)
-                    this._disappearTimer = null
+                    clearTimeout(this._timerId!)
+                    this._timerId = null
                     detach(this._el)
                 } else {
                     this._state = STATE.DISAPPEAR
@@ -148,8 +148,8 @@ export default class Progress {
             webkitTransition: transition,
         })
 
-        this._disappearTimer = setTimeout(() => {
-            this._disappearTimer = null
+        this._timerId = setTimeout(() => {
+            this._timerId = null
             const restart = this._state === STATE.DISAPPEAR_RESTART
             this._state = STATE.NOTING
 
@@ -160,38 +160,37 @@ export default class Progress {
         }, opts.hideDuration + PERSIST_TIME)
     }
 
-    promise<T>(promise: Promise<T>, { delay = 0, min = 100 } = {}) {
+    promise<T>(p: Promise<T>, { delay = 0, min = 100 } = {}) {
         if (min > 0) {
-            promise = Promise.all([promise, new Promise(res => setTimeout(res, min))]).then(([v]) => v)
+            p = Promise.all([p, new Promise(res => setTimeout(res, min))]).then(([v]) => v)
         }
 
-        let timer: ReturnType<typeof setTimeout> | null
+        let timerId: ReturnType<typeof setTimeout> | null
 
         const start = () => {
-            timer = null
-            this._promises.push(promise)
+            timerId = null
+            this._promises.push(p)
             this.start()
         }
         if (delay > 0) {
-            timer = setTimeout(start, delay)
+            timerId = setTimeout(start, delay)
         } else {
             start()
         }
 
         const onFinally = () => {
-            if (timer) {
-                clearTimeout(timer)
+            if (timerId) {
+                clearTimeout(timerId)
                 return
             }
             const promises = this._promises
-            const idx = promises.indexOf(promise)
+            const idx = promises.indexOf(p)
             if (~idx) {
                 promises.splice(idx, 1)
                 if (promises.length === 0) this.end()
             }
         }
-
-        return promise.then(
+        return p.then(
             val => (onFinally(), val),
             err => (onFinally(), Promise.reject(err))
         )
