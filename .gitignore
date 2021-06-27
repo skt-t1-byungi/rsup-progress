@@ -2,6 +2,7 @@ node_modules/
 dist/
 public/
 gh-pages/
+.parcel-cache/
 .cache/
 *.log
 *.lock

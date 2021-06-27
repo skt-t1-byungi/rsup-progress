@@ -3,7 +3,7 @@
 </div>
 <br><br>
 
-> A simple progress bar with promises support
+> A simple (1Kb) progress bar with promises support
 
 [![npm](https://flat.badgen.net/npm/v/rsup-progress)](https://www.npmjs.com/package/rsup-progress)
 [![npm](https://flat.badgen.net/bundlephobia/minzip/rsup-progress)](https://bundlephobia.com/result?p=rsup-progress)
@@ -55,7 +55,7 @@ import Progress from 'rsup-progress'
 ```
 
 ## API
-### new Progress([options])
+### new Progress(options?)
 Create instance.
 ```js
 const progress = new Progress({
@@ -65,15 +65,15 @@ const progress = new Progress({
 ```
 
 #### options
-- `container` - Container element to append a progress bar. Default is `document.body`.
-- `position` - Position to be placed. Default is `top` (There are `top`, `bottom`, `none`).
-- `maxWidth` - Maximum width before completion. Default is `99.8%`.
 - `height` - Progress bar height. Default is `4px`.
-- `duration` - Duration time to reach maxWidth. Default is `60000`(ms).
-- `hideDuration` - Duration time to hide when completion. Default is `400`(ms).
-- `zIndex` - CSS z-index property. Default is `9999`.
 - `className` - Progress bar `class` attribute.
 - `color` - Progress bar color. Default is `#ff1a59`.
+- `container` - Element to append a progress bar. Default is `document.body`.
+- `maxWidth` - Maximum width before completion. Default is `99.8%`.
+- `position` - Position to be placed. Default is `top` (There are `top`, `bottom`, `none`).
+- `duration` - Time to reach maxWidth. Default is `60000`(ms).
+- `hideDuration` - Time to hide when completion. Default is `400`(ms).
+- `zIndex` - CSS z-index property. Default is `9999`.
 - `timing` - CSS animation timing function. Default is `cubic-bezier(0,1,0,1)`.
 
 ### progress.setOptions(options)
@@ -98,38 +98,35 @@ console.log(progress.isInProgress) // => true
 ### progress.start()
 Start the progress bar.
 
-### progress.end([immediately])
+### progress.end(immediately = false)
 Complete the progress bar. If `immediately` is true, remove the element immediately.
 
-### progress.promise(promise[, delay])
+### progress.promise(promise, options?)
 Call the start and end functions automatically by promise.
 ```js
 const response = await progress.promise(fetch('/data.json'))
 ```
 
-If `delay` is given, it starts after a delay.
+#### options.min
+The minimum time that progressbar is shown and maintained. Default is `100`ms. If `0` is given and promise is already resolved, the progressbar does not appear.
 
 ```js
-progress.promise(delay(500), 200) // => It starts 200ms later.
+progress.promise(Promise.resolve(), { min: 0 }) // => Progress bar does not appear.
+```
+
+#### options.delay
+If `options.delay` is given, it starts after a delay.
+
+```js
+progress.promise(delay(500), { delay: 200 }) // => It starts 200ms later.
 ```
 
 If the promise ends before the delay, the progress bar will not start.
 ```js
-progress.promise(delay(500), 600) // => Progress bar does not appear.
+progress.promise(delay(500), { delay: 600 }) // => Progress bar does not appear.
 ```
 
 It is useful when avoiding the progressbar flash that occurs when the promise is short.
-
-## Tips
-### Force the Progressbar animation.
-If you call the end function before the animation starts, the progressbar does not appear.
-The animation can be forced with the following trick.
-
-```js
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-progress.promise(Promise.all([yourPromise, delay(100)])) // => `delay(100)` prevents a quick end.
-```
 
 ## License
 MIT License ❤️📝 skt-t1-byungi

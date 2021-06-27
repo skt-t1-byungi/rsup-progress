@@ -13,10 +13,10 @@ interface Options {
 
 const enum STATE {
     DISAPPEAR = -1,
-    NOTING = 0,
-    APPEAR = 1,
-    PENDING = 2,
-    DISAPPEAR_RESTART = 3,
+    NOTING,
+    APPEAR,
+    PENDING,
+    DISAPPEAR_RESTART,
 }
 
 const PERSIST_TIME = 150
@@ -79,7 +79,7 @@ export default class Progress {
     }
 
     get isInProgress() {
-        return this._state <= 0
+        return this._state > 0
     }
 
     start() {
@@ -104,10 +104,6 @@ export default class Progress {
         })
         opts.container.appendChild(this._el)
 
-        this._appear()
-    }
-
-    private _appear() {
         this._appearRaf = requestAnimationFrame(() => {
             this._appearRaf = requestAnimationFrame(() => {
                 this._appearRaf = null

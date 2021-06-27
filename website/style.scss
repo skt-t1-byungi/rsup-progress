@@ -1,6 +1,6 @@
-@import '~thejungle/reset';
-@import '~thejungle/media';
-@import '~thejungle';
+@use 'minireset.css';
+@use 'include-media/dist/_include-media' as *;
+@use 'thejungle' as *;
 
 ::-moz-selection {
     background: #f0a4a7;

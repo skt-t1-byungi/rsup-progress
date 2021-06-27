@@ -36,19 +36,19 @@
                 <button class="gh-btn top__btn" onclick="progress.end(true)">
                     progress<span class="gh-btn__bold">.end(<span class="gh-btn__param">true</span>)</span>
                 </button>
-                <button class="gh-btn top__btn" onclick="progress.promise(delay(1000))">
-                    progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(1000)</span>)</span>
+                <button class="gh-btn top__btn" onclick="progress.promise(delay(300))">
+                    progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(300)</span>)</span>
                 </button>
-                <button class="gh-btn top__btn" onclick="progress.promise(delay(1000), 600)">
+                <button class="gh-btn top__btn" onclick="progress.promise(delay(300), {min: 1000})">
                     progress<span class="gh-btn__bold"
-                        >.promise(<span class="gh-btn__param">delay(1000)</span>,
-                        <span class="gh-btn__param">600</span>)</span
+                        >.promise(<span class="gh-btn__param">delay(300)</span>,
+                        <span class="gh-btn__param">{ min: 1000 }</span>)</span
                     >
                 </button>
-                <button class="gh-btn top__btn" onclick="progress.promise(delay(1000), 1000)">
+                <button class="gh-btn top__btn" onclick="progress.promise(delay(1000), {delay: 800})">
                     progress<span class="gh-btn__bold"
                         >.promise(<span class="gh-btn__param">delay(1000)</span>,
-                        <span class="gh-btn__param">1000</span>)</span
+                        <span class="gh-btn__param">{ delay: 800 }</span>)</span
                     >
                 </button>
             </div>
