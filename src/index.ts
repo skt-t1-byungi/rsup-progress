@@ -1,4 +1,4 @@
-interface UserOptions {
+interface Options {
     maxWidth?: number | string
     height?: number | string
     duration?: number
@@ -11,65 +11,67 @@ interface UserOptions {
     container?: HTMLElement
 }
 
-interface Options {
-    maxWidth: string
-    height: string
-    duration: number
-    hideDuration: number
-    zIndex: string
-    className: string
-    color: string
-    timing: string
-    position: 'top' | 'bottom' | 'none'
-    container: HTMLElement
+const enum STATE {
+    DISAPPEAR = -1,
+    NOTING = 0,
+    APPEAR = 1,
+    PENDING = 2,
+    DISAPPEAR_RESTART = 3,
 }
 
 const PERSIST_TIME = 150
 
 export default class Progress {
     private _el = document.createElement('div')
-    private _opts!: Options
-    private _isInProgress = false
-    private _isHiding = false
-    private _willRestart = false
-    private _rafId: number | null = null
-    private _promises: Array<Promise<any>> = []
+    private _state = STATE.NOTING
+    private _opts = {
+        maxWidth: '99.8%',
+        height: '4px',
+        duration: 60000,
+        hideDuration: 400,
+        zIndex: '9999',
+        color: '#ff1a59',
+        className: '',
+        timing: 'cubic-bezier(0,1,0,1)',
+        position: 'top',
+        container: document.body,
+    }
+    private _appearRaf: number | null = null
+    private _disappearTimer: number | null = null
+    private _promises: Promise<any>[] = []
 
-    constructor(userOpts: UserOptions = {}) {
-        this.setOptions(userOpts)
+    constructor(opts: Options = {}) {
+        this.setOptions(opts)
     }
 
-    setOptions(userOpts: UserOptions) {
-        if (userOpts.position && !~['top', 'bottom', 'none'].indexOf(userOpts.position)) {
-            throw new TypeError(`Expected "position" to be [top|bottom|none], but "${userOpts.position}".`)
-        }
-        if (userOpts.container && !(userOpts.container instanceof HTMLElement)) {
-            throw new TypeError('Expected "container" to be [HTMLElement] type.')
-        }
+    setOptions(opts: Options) {
+        if (isNumber(opts.maxWidth)) opts.maxWidth = opts.maxWidth + 'px'
+        if (isNumber(opts.height)) opts.height = opts.height + 'px'
+        if (isNumber(opts.zIndex)) opts.zIndex = String(opts.zIndex)
 
-        const opts = (this._opts = normalizeOptions(userOpts))
+        const options = assign(this._opts, opts)
+        this._el.className = options.className
 
-        this._el.className = opts.className
-        this._css({
+        const style = {
             height: opts.height,
             background: opts.color,
             zIndex: opts.zIndex,
-        })
-        this._css(
-            opts.position === 'none'
-                ? {
-                      position: '',
-                      left: '',
-                      top: '',
-                      bottom: '',
-                  }
-                : {
-                      position: 'fixed',
-                      left: '0',
-                      top: opts.position === 'top' ? '0' : '',
-                      bottom: opts.position === 'bottom' ? '0' : '',
-                  }
-        )
+            position: '',
+            left: '',
+            top: '',
+            bottom: '',
+        }
+        switch (options.position) {
+            case 'top':
+                style.position = 'fixed'
+                style.top = '0'
+                break
+            case 'bottom':
+                style.position = 'fixed'
+                style.bottom = '0'
+                break
+        }
+        this._css(style)
     }
 
     private _css(style: Partial<CSSStyleDeclaration>) {
@@ -77,60 +79,69 @@ export default class Progress {
     }
 
     get isInProgress() {
-        return this._isInProgress
+        return this._state <= 0
     }
 
     start() {
-        if (this._isInProgress) {
-            if (this._isHiding) this._willRestart = true
-            return
+        switch (this._state) {
+            case STATE.APPEAR:
+            case STATE.PENDING:
+            case STATE.DISAPPEAR_RESTART:
+                return
+            case STATE.DISAPPEAR:
+                this._state = STATE.DISAPPEAR_RESTART
+                return
         }
+        this._state = STATE.PENDING
 
-        this._isInProgress = true
-
-        const transition = `width ${this._opts.duration}ms ${this._opts.timing}`
+        const opts = this._opts
+        const transition = `width ${opts.duration}ms ${opts.timing}`
         this._css({
             width: '0',
             opacity: '1',
             transition,
             webkitTransition: transition,
         })
-
-        this._opts.container.appendChild(this._el)
-
-        this._nextFrame(() => this._css({ width: this._opts.maxWidth }))
+        opts.container.appendChild(this._el)
+        this._appear()
     }
 
-    private _nextFrame(cb: () => void) {
-        this._rafId = requestAnimationFrame(() => {
-            this._rafId = requestAnimationFrame(() => {
-                this._rafId = null
-                cb()
+    private _appear() {
+        this._appearRaf = requestAnimationFrame(() => {
+            this._appearRaf = requestAnimationFrame(() => {
+                this._appearRaf = null
+                this._css({ width: this._opts.maxWidth })
             })
         })
     }
 
-    end(immediately?: boolean) {
+    end(immediately = false) {
         this._promises = []
 
-        if (this._willRestart) this._willRestart = false
-        if (!this._isInProgress || (this._isHiding && !immediately)) return
-
-        if (immediately || this._rafId) {
-            if (this._rafId) {
-                cancelAnimationFrame(this._rafId)
-                this._rafId = null
-            }
-
-            this._isInProgress = false
-            this._isHiding = false
-
-            return detach(this._el)
+        switch (this._state) {
+            case STATE.NOTING:
+                return
+            case STATE.APPEAR:
+                this._state = STATE.NOTING
+                cancelAnimationFrame(this._appearRaf!)
+                this._appearRaf = null
+                return
+            case STATE.DISAPPEAR:
+            case STATE.DISAPPEAR_RESTART:
+                if (immediately) {
+                    this._state = STATE.NOTING
+                    clearTimeout(this._disappearTimer!)
+                    this._disappearTimer = null
+                    detach(this._el)
+                } else {
+                    this._state = STATE.DISAPPEAR
+                }
+                return
         }
+        this._state = STATE.DISAPPEAR
 
-        this._isHiding = true
-
-        const transition = `width 50ms, opacity ${this._opts.hideDuration}ms ${PERSIST_TIME}ms`
+        const opts = this._opts
+        const transition = `width 50ms, opacity ${opts.hideDuration}ms ${PERSIST_TIME}ms`
         this._css({
             width: '100%',
             opacity: '0',
@@ -138,40 +149,42 @@ export default class Progress {
             webkitTransition: transition,
         })
 
-        setTimeout(() => {
-            if (!this._isHiding) return
-
-            this._isHiding = false
-            this._isInProgress = false
+        this._disappearTimer = setTimeout(() => {
+            this._disappearTimer = null
+            const restart = this._state === STATE.DISAPPEAR_RESTART
+            this._state = STATE.NOTING
 
             detach(this._el)
-
-            if (this._willRestart) {
-                this._willRestart = false
+            if (restart) {
                 this.start()
             }
-        }, this._opts.hideDuration + PERSIST_TIME)
+        }, opts.hideDuration + PERSIST_TIME)
     }
 
-    promise<T>(promise: Promise<T>, delay = 0) {
-        let timerId: number | null = null
+    promise<T>(promise: Promise<T>, { delay = 0, min = 100 } = {}) {
+        if (min > 0) {
+            promise = Promise.all([promise, new Promise(res => setTimeout(res, min))]).then(([v]) => v)
+        }
+
+        let timer: number | null = null
 
         const start = () => {
-            timerId = null
+            timer = null
             this._promises.push(promise)
             this.start()
         }
-
         if (delay > 0) {
-            timerId = setTimeout(start, delay)
+            timer = setTimeout(start, delay)
         } else {
             start()
         }
 
         const onFinally = () => {
-            if (timerId) {
-                return clearTimeout(timerId)
+            if (timer) {
+                clearTimeout(timer)
+                return
             }
+
             const promises = this._promises
             const idx = promises.indexOf(promise)
             if (~idx) {
@@ -187,28 +200,8 @@ export default class Progress {
     }
 }
 
-function normalizeOptions(opts: UserOptions): Options {
-    opts = assign(
-        {
-            maxWidth: '99.8%',
-            height: '4px',
-            duration: 60000,
-            hideDuration: 400,
-            zIndex: '9999',
-            color: '#ff1a59',
-            className: '',
-            timing: 'cubic-bezier(0,1,0,1)',
-            position: 'top',
-            container: document.body,
-        },
-        opts
-    )
-
-    if (typeof opts.maxWidth === 'number') opts.maxWidth = opts.maxWidth + 'px'
-    if (typeof opts.height === 'number') opts.height = opts.height + 'px'
-    if (typeof opts.zIndex === 'number') opts.zIndex = String(opts.zIndex)
-
-    return opts as Options
+function isNumber(v: any): v is number {
+    return typeof v === 'number'
 }
 
 function assign<T1, T2>(target: T1, src: T2): T1 & T2 {
