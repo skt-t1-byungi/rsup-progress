@@ -10,8 +10,8 @@
         <title>Rsup Progress</title>
         <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
         <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet" />
-        <link rel="stylesheet" href="./style.scss" />
         <script src="//polyfill.io/v3/polyfill.min.js"></script>
+        <script type="module" src="./website.ts"></script>
     </head>
     <body>
         <div class="top">
@@ -21,7 +21,7 @@
                     <span class="logo__txt1">Rsup</span>
                     <span class="logo__txt2">Progress</span>
                 </div>
-                <p class="logo__desc">A simple progress bar with promises support</p>
+                <p class="logo__desc">A simple(1KB) progress bar with promises support</p>
             </h1>
             <a class="full-btn top__github" href="https://github.com/skt-t1-byungi/rsup-progress"
                 >View on <span class="full-btn__bold">Github</span></a
@@ -39,15 +39,15 @@
                 <button class="gh-btn top__btn" onclick="progress.promise(delay(300))">
                     progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(300)</span>)</span>
                 </button>
-                <button class="gh-btn top__btn" onclick="progress.promise(delay(300), {min: 1000})">
-                    progress<span class="gh-btn__bold"
-                        >.promise(<span class="gh-btn__param">delay(300)</span>,
-                        <span class="gh-btn__param">{ min: 1000 }</span>)</span
+                <button class="gh-btn top__btn" onclick="progress.promise(delay(300), {min: 2000})">
+                    progress<span class="gh-btn__bold">
+                        .promise(<span class="gh-btn__param">delay(300)</span>,
+                        <span class="gh-btn__param">{ min: 2000 }</span>)</span
                     >
                 </button>
                 <button class="gh-btn top__btn" onclick="progress.promise(delay(1000), {delay: 800})">
-                    progress<span class="gh-btn__bold"
-                        >.promise(<span class="gh-btn__param">delay(1000)</span>,
+                    progress<span class="gh-btn__bold">
+                        .promise(<span class="gh-btn__param">delay(1000)</span>,
                         <span class="gh-btn__param">{ delay: 800 }</span>)</span
                     >
                 </button>
@@ -61,9 +61,7 @@
                 </p>
                 <p>This gives users a natural animation without the exact percentage of progress.</p>
             </div>
-
             <div class="bottom__license">MIT License ❤️📝 <span class="bottom__author">skt-t1-byungi</span></div>
         </footer>
-        <script src="./app.ts"></script>
     </body>
 </html>

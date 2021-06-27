@@ -1,6 +1,6 @@
 {
     "name": "rsup-progress",
-    "description": "A simple (1Kb) progress bar with promises support",
+    "description": "A simple(1KB) progress bar with promises support",
     "version": "1.4.0",
     "repository": "https://github.com/skt-t1-byungi/rsup-progress.git",
     "author": "skt-t1-byungi <tiniwz@gmail.com>",
@@ -20,11 +20,11 @@
     ],
     "license": "MIT",
     "scripts": {
-        "dev": "parcel serve website/index.html --dist-dir public",
+        "dev": "wmr start",
         "test": "echo skip",
         "build": "rm -rf dist && tsc",
         "umd": "rollup dist/index.js --file dist/index.umd.js --format umd --name RsupProgress",
-        "website": "parcel build website/index.html --dist-dir public --public-url ./  --no-source-maps",
+        "website": "wmr build",
         "deploy": "rm -rf public && npm run website && gh-pages -d public",
         "prepublishOnly": "npm run test && npm run size && npm run umd",
         "size": "npm run build && package-size ./dist/index.js --no-cache"
@@ -33,19 +33,16 @@
         "node": ">= 6"
     },
     "devDependencies": {
-        "@parcel/config-default": "^2.0.0-beta.3.1",
-        "@parcel/transformer-sass": "2.0.0-beta.3.1",
-        "@parcel/transformer-typescript-tsc": "^2.0.0-beta.3.1",
         "gh-pages": "^3.2.3",
         "include-media": "^1.4.10",
         "minireset.css": "^0.0.7",
         "package-size": "^2.3.0",
-        "parcel": "^2.0.0-beta.3.1",
         "prettier": "^2.3.2",
         "rollup": "^2.52.3",
         "sass": "^1.35.1",
         "thejungle": "^3.0.0",
-        "typescript": "^4.3.4"
+        "typescript": "^4.3.4",
+        "wmr": "^3.1.1"
     },
     "prettier": {
         "arrowParens": "avoid",
