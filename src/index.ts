@@ -37,7 +37,7 @@ export default class Progress {
         container: document.body,
     }
     private _appearRaf: number | null = null
-    private _disappearTimer: number | null = null
+    private _disappearTimer: ReturnType<typeof setTimeout> | null = null
     private _promises: Promise<any>[] = []
 
     constructor(opts: Options = {}) {
@@ -53,9 +53,9 @@ export default class Progress {
         this._el.className = options.className
 
         const style = {
-            height: opts.height,
-            background: opts.color,
-            zIndex: opts.zIndex,
+            height: options.height,
+            background: options.color,
+            zIndex: options.zIndex,
             position: '',
             left: '',
             top: '',
@@ -103,6 +103,7 @@ export default class Progress {
             webkitTransition: transition,
         })
         opts.container.appendChild(this._el)
+
         this._appear()
     }
 
@@ -125,6 +126,7 @@ export default class Progress {
                 this._state = STATE.NOTING
                 cancelAnimationFrame(this._appearRaf!)
                 this._appearRaf = null
+                detach(this._el)
                 return
             case STATE.DISAPPEAR:
             case STATE.DISAPPEAR_RESTART:
@@ -166,7 +168,7 @@ export default class Progress {
             promise = Promise.all([promise, new Promise(res => setTimeout(res, min))]).then(([v]) => v)
         }
 
-        let timer: number | null = null
+        let timer: ReturnType<typeof setTimeout> | null
 
         const start = () => {
             timer = null
@@ -184,7 +186,6 @@ export default class Progress {
                 clearTimeout(timer)
                 return
             }
-
             const promises = this._promises
             const idx = promises.indexOf(promise)
             if (~idx) {
@@ -194,7 +195,7 @@ export default class Progress {
         }
 
         return promise.then(
-            v => (onFinally(), v),
+            val => (onFinally(), val),
             err => (onFinally(), Promise.reject(err))
         )
     }
