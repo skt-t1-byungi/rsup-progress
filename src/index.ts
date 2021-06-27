@@ -39,6 +39,7 @@ export default class Progress {
     private _rafId: number | null = null
     private _timerId: ReturnType<typeof setTimeout> | null = null
     private _promises: Promise<any>[] = []
+    private _delayTimers: ReturnType<typeof setTimeout>[] = []
 
     constructor(opts: Options = {}) {
         this.setOptions(opts)
@@ -115,6 +116,7 @@ export default class Progress {
 
     end(immediately = false) {
         this._promises = []
+        this._delayTimers.splice(0).forEach(clearTimeout)
 
         switch (this._state) {
             case STATE.NOTING:
@@ -136,6 +138,12 @@ export default class Progress {
                     this._state = STATE.DISAPPEAR
                 }
                 return
+        }
+
+        if (immediately) {
+            this._state = STATE.NOTING
+            detach(this._el)
+            return
         }
         this._state = STATE.DISAPPEAR
 
@@ -168,12 +176,21 @@ export default class Progress {
         let timerId: ReturnType<typeof setTimeout> | null
 
         const start = () => {
-            timerId = null
             this._promises.push(p)
             this.start()
         }
+        const cleanupTimer = () => {
+            const timers = this._delayTimers
+            timers.splice(timers.indexOf(timerId!), 1)
+            timerId = null
+        }
         if (delay > 0) {
-            timerId = setTimeout(start, delay)
+            this._delayTimers.push(
+                (timerId = setTimeout(() => {
+                    cleanupTimer()
+                    start()
+                }, delay))
+            )
         } else {
             start()
         }
@@ -181,6 +198,7 @@ export default class Progress {
         const onFinally = () => {
             if (timerId) {
                 clearTimeout(timerId)
+                cleanupTimer()
                 return
             }
             const promises = this._promises
