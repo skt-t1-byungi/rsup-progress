@@ -13,7 +13,7 @@ interface Options {
 
 const enum STATE {
     DISAPPEAR = -1,
-    NOTING,
+    NOTHING,
     APPEAR,
     PENDING,
     DISAPPEAR_RESTART,
@@ -23,7 +23,7 @@ const PERSIST_TIME = 150
 
 export default class Progress {
     private _el = document.createElement('div')
-    private _state = STATE.NOTING
+    private _state = STATE.NOTHING
     private _opts = {
         maxWidth: '99.8%',
         height: '4px',
@@ -119,10 +119,10 @@ export default class Progress {
         this._delayTimers.splice(0).forEach(clearTimeout)
 
         switch (this._state) {
-            case STATE.NOTING:
+            case STATE.NOTHING:
                 return
             case STATE.APPEAR:
-                this._state = STATE.NOTING
+                this._state = STATE.NOTHING
                 cancelAnimationFrame(this._rafId!)
                 this._rafId = null
                 detach(this._el)
@@ -130,7 +130,7 @@ export default class Progress {
             case STATE.DISAPPEAR:
             case STATE.DISAPPEAR_RESTART:
                 if (immediately) {
-                    this._state = STATE.NOTING
+                    this._state = STATE.NOTHING
                     clearTimeout(this._timerId!)
                     this._timerId = null
                     detach(this._el)
@@ -141,7 +141,7 @@ export default class Progress {
         }
 
         if (immediately) {
-            this._state = STATE.NOTING
+            this._state = STATE.NOTHING
             detach(this._el)
             return
         }
@@ -159,7 +159,7 @@ export default class Progress {
         this._timerId = setTimeout(() => {
             this._timerId = null
             const restart = this._state === STATE.DISAPPEAR_RESTART
-            this._state = STATE.NOTING
+            this._state = STATE.NOTHING
 
             detach(this._el)
             if (restart) {
