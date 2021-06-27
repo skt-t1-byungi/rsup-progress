@@ -92,7 +92,7 @@ export default class Progress {
                 this._state = STATE.DISAPPEAR_RESTART
                 return
         }
-        this._state = STATE.PENDING
+        this._state = STATE.APPEAR
 
         const opts = this._opts
         const transition = `width ${opts.duration}ms ${opts.timing}`
@@ -111,6 +111,7 @@ export default class Progress {
         this._appearRaf = requestAnimationFrame(() => {
             this._appearRaf = requestAnimationFrame(() => {
                 this._appearRaf = null
+                this._state = STATE.PENDING
                 this._css({ width: this._opts.maxWidth })
             })
         })
