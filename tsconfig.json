@@ -7,5 +7,5 @@
         "outDir": "./dist",
         "strict": true
     },
-    "include": ["src/rsup-progress.ts"]
+    "include": ["src/"]
 }

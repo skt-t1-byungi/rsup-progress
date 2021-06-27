@@ -20,11 +20,11 @@
     ],
     "license": "MIT",
     "scripts": {
-        "dev": "wmr start",
+        "dev": "parcel website/index.html",
         "test": "echo skip",
         "build": "rm -rf dist && tsc",
         "umd": "rollup dist/index.js --file dist/index.umd.js --format umd --name RsupProgress",
-        "website": "wmr build",
+        "website": "parcel build website/index.html -d public --public-url ./",
         "deploy": "rm -rf public && npm run website && gh-pages -d public",
         "prepublishOnly": "npm run test && npm run size && npm run umd",
         "size": "npm run build && package-size ./dist/index.js --no-cache"
@@ -37,18 +37,11 @@
         "include-media": "^1.4.10",
         "minireset.css": "^0.0.7",
         "package-size": "^2.3.0",
+        "parcel": "1.12.3",
         "prettier": "^2.3.2",
         "rollup": "^2.52.3",
         "sass": "^1.35.1",
         "thejungle": "^3.0.0",
-        "typescript": "^4.3.4",
-        "wmr": "^3.1.1"
-    },
-    "prettier": {
-        "arrowParens": "avoid",
-        "semi": false,
-        "singleQuote": true,
-        "printWidth": 120,
-        "tabWidth": 4
+        "typescript": "^4.3.4"
     }
 }

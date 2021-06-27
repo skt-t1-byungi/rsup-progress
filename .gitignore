@@ -2,8 +2,8 @@ node_modules/
 dist/
 public/
 gh-pages/
-.parcel-cache/
 .cache/
 *.log
 *.lock
 pnpm-lock.yaml
+package-lock.json
