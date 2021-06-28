@@ -5,9 +5,12 @@
     "repository": "https://github.com/skt-t1-byungi/rsup-progress.git",
     "author": "skt-t1-byungi <tiniwz@gmail.com>",
     "type": "module",
-    "unpkg": "dist/index.umd.js",
-    "main": "dist/index.js",
-    "types": "dist/index.d.ts",
+    "unpkg": "./dist/index.umd.js",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        "require": "./dist/index.umd.js"
+    },
     "keywords": [
         "progress",
         "progressbar",
