@@ -180,7 +180,7 @@ export default class Progress {
         }
         const cleanupTimer = () => {
             const timers = this._delayTimers
-            timers.splice(timers.indexOf(timerId!), 1)
+            timers.splice(timers.indexOf(timerId!) >>> 0, 1)
             timerId = null
         }
         if (delay > 0) {
