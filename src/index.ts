@@ -21,7 +21,7 @@ const enum STATE {
 
 const PERSIST_TIME = 150
 
-export default class Progress {
+export class Progress {
     private _el = document.createElement('div')
     private _state = STATE.NOTHING
     private _opts = {

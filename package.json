@@ -1,16 +1,19 @@
 {
     "name": "rsup-progress",
     "description": "A simple(1KB) progress bar with promises support",
-    "version": "2.0.3",
+    "version": "3.0.0",
     "repository": "https://github.com/skt-t1-byungi/rsup-progress.git",
     "author": "skt-t1-byungi <tiniwz@gmail.com>",
-    "type": "module",
-    "unpkg": "./dist/index.umd.js",
-    "main": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "files": [
+        "dist/"
+    ],
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
     "exports": {
-        "require": "./dist/index.umd.js",
-        "import": "./dist/index.js"
+        ".": {
+            "require": "./dist/cjs/index.js",
+            "import": "./dist/esm/index.js"
+        }
     },
     "keywords": [
         "progress",
@@ -19,15 +22,13 @@
         "promise",
         "1kb"
     ],
-    "files": [
-        "dist"
-    ],
     "license": "MIT",
     "scripts": {
         "dev": "parcel website/index.html",
         "test": "echo skip",
-        "build": "rm -rf dist && tsc",
-        "umd": "rollup dist/index.js --file dist/index.umd.js --format umd --name RsupProgress",
+        "build": "rm -rf dist && npm run esm && npm run cjs",
+        "esm": "tsc -p tsconfig.esm.json",
+        "cjs": "tsc -p tsconfig.cjs.json",
         "website": "parcel build website/index.html -d public --public-url ./",
         "deploy": "rm -rf public && npm run website && gh-pages -d public",
         "prepublishOnly": "npm run test && npm run size && npm run umd",
@@ -42,10 +43,9 @@
         "minireset.css": "^0.0.7",
         "package-size": "^2.3.0",
         "parcel": "1.12.3",
-        "prettier": "^2.3.2",
-        "rollup": "^2.52.3",
-        "sass": "^1.35.1",
+        "prettier": "^2.4.1",
+        "sass": "^1.42.1",
         "thejungle": "^3.0.0",
-        "typescript": "^4.3.4"
+        "typescript": "^4.4.3"
     }
 }

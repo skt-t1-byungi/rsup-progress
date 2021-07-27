@@ -35,21 +35,13 @@ const response = await progress.promise(fetch('/data.json'))
 npm i rsup-progress
 ```
 ```js
-import Progress from 'rsup-progress'
-```
-
-### UMD
-```html
-<script src="https://unpkg.com/rsup-progress"></script>
-<script>
-    const progress = new RsupProgress();
-</script>
+import { Progress } from 'rsup-progress'
 ```
 
 ### Browser ESM
 ```html
 <script type="module">
-    import Progress from 'https://unpkg.com/rsup-progress/dist/index.js';
+    import { Progress } from 'https://unpkg.com/rsup-progress/dist/esm/index.js';
     const progress = new Progress()
 </script>
 ```
