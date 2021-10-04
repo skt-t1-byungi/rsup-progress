@@ -31,8 +31,8 @@
         "cjs": "tsc -p tsconfig.cjs.json",
         "website": "parcel build website/index.html -d public --public-url ./",
         "deploy": "rm -rf public && npm run website && gh-pages -d public",
-        "prepublishOnly": "npm run test && npm run size && npm run umd",
-        "size": "npm run build && package-size ./dist/index.js --no-cache"
+        "prepublishOnly": "npm run test && npm run build && npm run size",
+        "size": "package-size . --no-cache"
     },
     "engines": {
         "node": ">= 6"
