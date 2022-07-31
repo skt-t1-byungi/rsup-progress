@@ -7,3 +7,4 @@ gh-pages/
 *.lock
 pnpm-lock.yaml
 package-lock.json
+.parcel-cache
