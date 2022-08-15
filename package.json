@@ -38,15 +38,15 @@
         "node": ">= 6"
     },
     "devDependencies": {
-        "@parcel/core": "^2.6.2",
-        "@parcel/transformer-sass": "^2.6.2",
+        "@parcel/core": "^2.7.0",
+        "@parcel/transformer-sass": "^2.7.0",
         "gh-pages": "^4.0.0",
         "include-media": "^1.4.10",
         "minireset.css": "^0.0.7",
         "package-size": "^2.3.0",
-        "parcel": "2.6.2",
+        "parcel": "2.7.0",
         "prettier": "^2.7.1",
-        "sass": "^1.54.0",
+        "sass": "^1.54.4",
         "thejungle": "^3.0.0",
         "typescript": "^4.7.4"
     }
