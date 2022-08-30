@@ -53,27 +53,31 @@ export class Progress {
         opts.zIndex = String(opts.zIndex)
 
         this._el.className = opts.className
-        this._css({
-            height: opts.height,
-            background: opts.color,
-            zIndex: opts.zIndex,
-            position: '',
-            left: '',
-            top: '',
-            bottom: '',
-            ...{
-                top: {
-                    position: 'fixed',
-                    top: '0',
-                    left: '0',
+        this._css(
+            assign(
+                {
+                    height: opts.height,
+                    background: opts.color,
+                    zIndex: opts.zIndex,
+                    position: '',
+                    left: '',
+                    top: '',
+                    bottom: '',
                 },
-                bottom: {
-                    position: 'fixed',
-                    bottom: '0',
-                    left: '0',
-                },
-            }[opts.position],
-        })
+                {
+                    top: {
+                        position: 'fixed',
+                        top: '0',
+                        left: '0',
+                    },
+                    bottom: {
+                        position: 'fixed',
+                        bottom: '0',
+                        left: '0',
+                    },
+                }[opts.position]
+            )
+        )
     }
 
     private _css(style: Partial<CSSStyleDeclaration>) {
