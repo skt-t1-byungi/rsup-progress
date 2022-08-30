@@ -1,4 +1,4 @@
-interface Options {
+export interface ProgressOptions {
     maxWidth?: number | string
     height?: number | string
     duration?: number
@@ -11,23 +11,23 @@ interface Options {
     container?: HTMLElement
 }
 
-const enum STATE {
-    DISAPPEAR = -1,
-    NOTHING,
-    APPEAR,
-    PENDING,
-    DISAPPEAR_RESTART,
-}
+const STATE = {
+    DISAPPEAR: 0,
+    NOTHING: 1,
+    APPEAR: 2,
+    PENDING: 3,
+    DISAPPEAR_RESTART: 4,
+} as const
 
 const PERSIST_TIME = 150
 
 export class Progress {
     private _el = document.createElement('div')
-    private _state = STATE.NOTHING
+    private _state = STATE.NOTHING as typeof STATE[keyof typeof STATE]
     private _opts = {
         maxWidth: '99.8%',
         height: '4px',
-        duration: 60000,
+        duration: 60_000,
         hideDuration: 400,
         zIndex: '9999',
         color: '#ff1a59',
@@ -41,40 +41,39 @@ export class Progress {
     private _promises: Promise<any>[] = []
     private _delayTimers: ReturnType<typeof setTimeout>[] = []
 
-    constructor(opts: Options = {}) {
-        this.setOptions(opts)
+    constructor(options: ProgressOptions = {}) {
+        this.setOptions(options)
     }
 
-    setOptions(opts: Options) {
-        if (isNumber(opts.maxWidth)) opts.maxWidth = opts.maxWidth + 'px'
-        if (isNumber(opts.height)) opts.height = opts.height + 'px'
-        if (isNumber(opts.zIndex)) opts.zIndex = String(opts.zIndex)
+    setOptions(newOptions: ProgressOptions) {
+        const opts = assign(this._opts, newOptions)
 
-        const options = assign(this._opts, opts)
-        this._el.className = options.className
+        if (!isNaN(opts.maxWidth as any)) (opts.maxWidth as any) += 'px'
+        if (!isNaN(opts.height as any)) (opts.height as any) += 'px'
+        opts.zIndex = String(opts.zIndex)
 
-        const style = {
-            height: options.height,
-            background: options.color,
-            zIndex: options.zIndex,
+        this._el.className = opts.className
+        this._css({
+            height: opts.height,
+            background: opts.color,
+            zIndex: opts.zIndex,
             position: '',
             left: '',
             top: '',
             bottom: '',
-        }
-        switch (options.position) {
-            case 'top':
-                style.position = 'fixed'
-                style.top = '0'
-                style.left = '0'
-                break
-            case 'bottom':
-                style.position = 'fixed'
-                style.bottom = '0'
-                style.left = '0'
-                break
-        }
-        this._css(style)
+            ...{
+                top: {
+                    position: 'fixed',
+                    top: '0',
+                    left: '0',
+                },
+                bottom: {
+                    position: 'fixed',
+                    bottom: '0',
+                    left: '0',
+                },
+            }[opts.position],
+        })
     }
 
     private _css(style: Partial<CSSStyleDeclaration>) {
@@ -82,7 +81,7 @@ export class Progress {
     }
 
     get isInProgress() {
-        return this._state > 0
+        return this._state !== 0
     }
 
     start() {
@@ -214,10 +213,6 @@ export class Progress {
             err => (onFinally(), Promise.reject(err))
         )
     }
-}
-
-function isNumber(v: any): v is number {
-    return typeof v === 'number'
 }
 
 function assign<T1, T2>(target: T1, src: T2): T1 & T2 {
