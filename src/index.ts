@@ -66,10 +66,12 @@ export class Progress {
             case 'top':
                 style.position = 'fixed'
                 style.top = '0'
+                style.left = '0'
                 break
             case 'bottom':
                 style.position = 'fixed'
                 style.bottom = '0'
+                style.left = '0'
                 break
         }
         this._css(style)
