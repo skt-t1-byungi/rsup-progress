@@ -212,18 +212,18 @@ export class Progress {
                 if (promises.length === 0) this.end()
             }
         }
-        p = p.then(
+        const ret = p.then(
             val => (onFinally(), val),
             err => (onFinally(), Promise.reject(err)),
         )
         if (waitAnimation) {
-            return p.then(
+            return ret.then(
                 v =>
                     new Promise(res => {
                         this._el.addEventListener(
                             'transitionend',
                             function f() {
-                                res(v)
+                                requestAnimationFrame(() => requestAnimationFrame(() => res(v)))
                                 this.removeEventListener('transitionend', f)
                             },
                             { once: true },
@@ -231,7 +231,7 @@ export class Progress {
                     }),
             )
         }
-        return p
+        return ret
     }
 }
 

@@ -24,7 +24,7 @@
     ],
     "license": "MIT",
     "scripts": {
-        "dev": "parcel website/index.html",
+        "dev": "npm run start --prefix website",
         "test": "echo skip",
         "build": "rm -rf dist && npm run esm && npm run cjs",
         "esm": "tsc -p tsconfig.esm.json",

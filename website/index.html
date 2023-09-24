@@ -39,6 +39,14 @@
                 <button class="gh-btn top__btn" onclick="progress.promise(delay(300))">
                     progress<span class="gh-btn__bold">.promise(<span class="gh-btn__param">delay(300)</span>)</span>
                 </button>
+                <button
+                    class="gh-btn top__btn"
+                    onclick="progress.promise(delay(500), {waitAnimation: true}).then(()=> alert('Complete!'))"
+                >
+                    progress<span class="gh-btn__bold"
+                        >.promise(<span class="gh-btn__param">delay(500)</span>, { waitAnimation: true })</span
+                    >
+                </button>
             </div>
         </div>
         <footer class="bottom">
