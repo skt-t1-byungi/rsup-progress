@@ -38,16 +38,16 @@
         "node": ">= 6"
     },
     "devDependencies": {
-        "@parcel/core": "^2.7.0",
-        "@parcel/transformer-sass": "^2.7.0",
-        "gh-pages": "^4.0.0",
-        "include-media": "^1.4.10",
+        "@parcel/core": "^2.9.3",
+        "@parcel/transformer-sass": "^2.9.3",
+        "gh-pages": "^6.0.0",
+        "include-media": "^2.0.0",
         "minireset.css": "^0.0.7",
         "package-size": "^2.3.0",
-        "parcel": "2.7.0",
-        "prettier": "^2.7.1",
-        "sass": "^1.54.4",
+        "parcel": "2.9.3",
+        "prettier": "^3.0.3",
+        "sass": "^1.68.0",
         "thejungle": "^3.0.0",
-        "typescript": "^4.7.4"
+        "typescript": "^5.2.2"
     }
 }

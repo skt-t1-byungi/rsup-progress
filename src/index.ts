@@ -23,7 +23,7 @@ const PERSIST_TIME = 150
 
 export class Progress {
     private _el = document.createElement('div')
-    private _state = STATE.NOTHING as typeof STATE[keyof typeof STATE]
+    private _state = STATE.NOTHING as (typeof STATE)[keyof typeof STATE]
     private _opts = {
         maxWidth: '99.8%',
         height: '4px',
@@ -75,8 +75,8 @@ export class Progress {
                         bottom: '0',
                         left: '0',
                     },
-                }[opts.position]
-            )
+                }[opts.position],
+            ),
         )
     }
 
@@ -193,7 +193,7 @@ export class Progress {
                 (timerId = setTimeout(() => {
                     cleanupTimer()
                     start()
-                }, delay))
+                }, delay)),
             )
         } else {
             start()
@@ -214,7 +214,7 @@ export class Progress {
         }
         return p.then(
             val => (onFinally(), val),
-            err => (onFinally(), Promise.reject(err))
+            err => (onFinally(), Promise.reject(err)),
         )
     }
 }
