@@ -173,8 +173,8 @@ export class Progress {
         }, opts.hideDuration + PERSIST_TIME)
     }
 
-    promise<T>(p: Promise<T>, { delay = 0, min = 100 } = {}) {
-        let timerId: ReturnType<typeof setTimeout> | null
+    promise<T>(p: Promise<T>, { delay = 0, min = 100, waitAnimation = false } = {}) {
+        let delayTid: ReturnType<typeof setTimeout> | null
 
         const start = () => {
             if (min > 0) {
@@ -183,15 +183,15 @@ export class Progress {
             this._promises.push(p)
             this.start()
         }
-        const cleanupTimer = () => {
+        const cleanupDelayTimer = () => {
             const timers = this._delayTimers
-            timers.splice(timers.indexOf(timerId!) >>> 0, 1)
-            timerId = null
+            timers.splice(timers.indexOf(delayTid!) >>> 0, 1)
+            delayTid = null
         }
         if (delay > 0) {
             this._delayTimers.push(
-                (timerId = setTimeout(() => {
-                    cleanupTimer()
+                (delayTid = setTimeout(() => {
+                    cleanupDelayTimer()
                     start()
                 }, delay)),
             )
@@ -200,9 +200,9 @@ export class Progress {
         }
 
         const onFinally = () => {
-            if (timerId) {
-                clearTimeout(timerId)
-                cleanupTimer()
+            if (delayTid) {
+                clearTimeout(delayTid)
+                cleanupDelayTimer()
                 return
             }
             const promises = this._promises
@@ -212,10 +212,26 @@ export class Progress {
                 if (promises.length === 0) this.end()
             }
         }
-        return p.then(
+        p = p.then(
             val => (onFinally(), val),
             err => (onFinally(), Promise.reject(err)),
         )
+        if (waitAnimation) {
+            return p.then(
+                v =>
+                    new Promise(res => {
+                        this._el.addEventListener(
+                            'transitionend',
+                            function f() {
+                                res(v)
+                                this.removeEventListener('transitionend', f)
+                            },
+                            { once: true },
+                        )
+                    }),
+            )
+        }
+        return p
     }
 }
 

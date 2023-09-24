@@ -139,6 +139,17 @@ progress.promise(delay(500), { delay: 600 }) // => Progress bar does not appear.
 
 This is useful to prevent "flashing" of the progress bar for short-lived promises.
 
+#### options.waitAnimation
+
+If `options.waitAnimation` is set, the progress bar will wait for the animation to finish before resolving the promise.
+
+```js
+await progress.promise(fetch('/data.json'), { waitAnimation: true })
+alert('Complete!')
+```
+
+Useful for immediate actions like `alert` or `confirm`. Default is `false`.
+
 ## License
 
 MIT License ❤️📝 skt-t1-byungi
