@@ -1,6 +1,6 @@
-@use '../node_modules/minireset.css/minireset.sass';
-@use '../node_modules/include-media/dist/include-media' as *;
-@use '../node_modules/thejungle' as *;
+@use 'minireset.css/minireset.sass';
+@use 'include-media/dist/include-media' as *;
+@use 'thejungle' as *;
 
 ::-moz-selection {
     background: #f0a4a7;

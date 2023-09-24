@@ -1,0 +1,17 @@
+{
+    "private": true,
+    "scripts": {
+        "dev": "parcel index.html",
+        "build": "parcel build index.html --public-url ./"
+    },
+    "dependencies": {
+        "@parcel/core": "^2.9.3",
+        "@parcel/transformer-sass": "^2.9.3",
+        "include-media": "^2.0.0",
+        "minireset.css": "^0.0.7",
+        "parcel": "2.9.3",
+        "sass": "^1.68.0",
+        "thejungle": "^3.0.0",
+        "typescript": "^5.2.2"
+    }
+}

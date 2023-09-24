@@ -1,10 +1,9 @@
+.DS_Store
 node_modules/
 dist/
-public/
-gh-pages/
-.cache/
-*.log
+.*/
+!.github/
+*-lock.yaml
+*-lock.json
 *.lock
-pnpm-lock.yaml
-package-lock.json
-.parcel-cache
+*.log
