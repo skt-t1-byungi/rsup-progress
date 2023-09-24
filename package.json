@@ -29,7 +29,7 @@
         "build": "rm -rf dist && npm run esm && npm run cjs",
         "esm": "tsc -p tsconfig.esm.json",
         "cjs": "tsc -p tsconfig.cjs.json",
-        "website": "parcel build website/index.html -d public --public-url ./",
+        "website": "parcel build --dist-dir public --public-url ./ website/index.html",
         "deploy": "rm -rf public && npm run website && gh-pages -d public",
         "prepublishOnly": "npm run test && npm run build && npm run size",
         "size": "package-size . --no-cache"
@@ -38,8 +38,10 @@
         "node": ">= 6"
     },
     "devDependencies": {
+        "@parcel/config-default": "^2.9.3",
         "@parcel/core": "^2.9.3",
         "@parcel/transformer-sass": "^2.9.3",
+        "@parcel/transformer-typescript-tsc": "^2.9.3",
         "gh-pages": "^6.0.0",
         "include-media": "^2.0.0",
         "minireset.css": "^0.0.7",
