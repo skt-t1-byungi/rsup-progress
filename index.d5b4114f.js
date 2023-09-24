@@ -142,7 +142,7 @@
       this[globalName] = mainExports;
     }
   }
-})({"2PbE9":[function(require,module,exports) {
+})({"7iyQs":[function(require,module,exports) {
 var global = arguments[3];
 var HMR_HOST = null;
 var HMR_PORT = null;
@@ -754,16 +754,16 @@ class Progress {
                 if (promises.length === 0) this.end();
             }
         };
-        p = p.then((val)=>(onFinally(), val), (err)=>(onFinally(), Promise.reject(err)));
-        if (waitAnimation) return p.then((v)=>new Promise((res)=>{
+        const ret = p.then((val)=>(onFinally(), val), (err)=>(onFinally(), Promise.reject(err)));
+        if (waitAnimation) return ret.then((v)=>new Promise((res)=>{
                 this._el.addEventListener("transitionend", function f() {
-                    res(v);
+                    requestAnimationFrame(()=>requestAnimationFrame(()=>res(v)));
                     this.removeEventListener("transitionend", f);
                 }, {
                     once: true
                 });
             }));
-        return p;
+        return ret;
     }
 }
 function assign(target, src) {
@@ -774,7 +774,7 @@ function detach(el) {
     if (el.parentNode) el.parentNode.removeChild(el);
 }
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"dcw0E"}],"dcw0E":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"3dkiX"}],"3dkiX":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -804,6 +804,6 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}]},["2PbE9","2iQTb"], "2iQTb", "parcelRequire94c2")
+},{}]},["7iyQs","2iQTb"], "2iQTb", "parcelRequire94c2")
 
 //# sourceMappingURL=index.d5b4114f.js.map
