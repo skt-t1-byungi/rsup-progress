@@ -141,7 +141,7 @@ This is useful to prevent "flashing" of the progress bar for short-lived promise
 
 #### options.waitAnimation
 
-If `options.waitAnimation` is set, the progress bar will wait for the animation to finish before resolving the promise.
+If `options.waitAnimation` is set, the progress bar will wait for the hide animation to finish.
 
 ```js
 await progress.promise(fetch('/data.json'), { waitAnimation: true })
