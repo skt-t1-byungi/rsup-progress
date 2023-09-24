@@ -30,7 +30,7 @@
         "esm": "tsc -p tsconfig.esm.json",
         "cjs": "tsc -p tsconfig.cjs.json",
         "website": "npm run build --prefix website",
-        "deploy": "rm -rf public && npm run website && gh-pages -d website/dist",
+        "deploy": "rm -rf website/dist && npm run website && gh-pages -d website/dist",
         "prepublishOnly": "npm run test && npm run build"
     },
     "engines": {
