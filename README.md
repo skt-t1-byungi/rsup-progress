@@ -9,7 +9,7 @@
 [![npm](https://flat.badgen.net/bundlephobia/minzip/rsup-progress)](https://bundlephobia.com/result?p=rsup-progress)
 [![npm](https://flat.badgen.net/npm/license/rsup-progress)](https://github.com/skt-t1-byungi/rsup-progress/blob/master/LICENSE)
 
-The progress bar starts quickly but decelerates over time. Invoke the `end` function to finish the animation, providing a natural user experience without displaying the exact percentage of progress.
+The progress bar starts quickly but decelerates over time. Invoke the `end` function to finish the animation, providing a natural user experience without an exact percentage of progress.
 
 https://skt-t1-byungi.github.io/rsup-progress/
 
