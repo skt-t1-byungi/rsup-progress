@@ -2,7 +2,8 @@
     "private": true,
     "scripts": {
         "start": "parcel index.html",
-        "build": "parcel build index.html --public-url ./"
+        "build": "npm run clean && parcel build index.html --public-url ./",
+        "clean": "rm -rf dist .parcel-cache"
     },
     "dependencies": {
         "@parcel/core": "^2.9.3",
