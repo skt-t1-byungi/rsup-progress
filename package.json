@@ -1,14 +1,19 @@
 {
     "name": "rsup-progress",
     "description": "A lightweight (1KB) progress bar with promise support",
-    "version": "3.1.1",
+    "version": "3.2.0",
     "repository": "https://github.com/skt-t1-byungi/rsup-progress.git",
     "author": "skt-t1-byungi <tiniwz@gmail.com>",
     "files": [
         "dist/"
     ],
+    "workspaces": [
+        "website/"
+    ],
+    "source": "src/index.ts",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
+    "types": "dist/esm/index.d.ts",
     "exports": {
         ".": {
             "require": "./dist/cjs/index.js",

@@ -40,6 +40,7 @@ export class Progress {
     private _timerId: ReturnType<typeof setTimeout> | null = null
     private _promises: Promise<any>[] = []
     private _delayTimers: ReturnType<typeof setTimeout>[] = []
+    private _detachListeners: (() => void)[] = []
 
     constructor(options: ProgressOptions = {}) {
         this.setOptions(options)
@@ -130,7 +131,7 @@ export class Progress {
                 this._state = STATE.NOTHING
                 cancelAnimationFrame(this._rafId!)
                 this._rafId = null
-                detach(this._el)
+                this._detach()
                 return
             case STATE.DISAPPEAR:
             case STATE.DISAPPEAR_RESTART:
@@ -138,7 +139,7 @@ export class Progress {
                     this._state = STATE.NOTHING
                     clearTimeout(this._timerId!)
                     this._timerId = null
-                    detach(this._el)
+                    this._detach()
                 } else {
                     this._state = STATE.DISAPPEAR
                 }
@@ -147,7 +148,7 @@ export class Progress {
 
         if (immediately) {
             this._state = STATE.NOTHING
-            detach(this._el)
+            this._detach()
             return
         }
         this._state = STATE.DISAPPEAR
@@ -166,11 +167,16 @@ export class Progress {
             const restart = this._state === STATE.DISAPPEAR_RESTART
             this._state = STATE.NOTHING
 
-            detach(this._el)
+            this._detach()
             if (restart) {
                 this.start()
             }
         }, opts.hideDuration + PERSIST_TIME)
+    }
+
+    private _detach() {
+        this._detachListeners.splice(0).forEach(fn => fn())
+        this._el.parentNode?.removeChild(this._el)
     }
 
     promise<T>(p: Promise<T>, { delay = 0, min = 100, waitAnimation = false } = {}) {
@@ -183,55 +189,42 @@ export class Progress {
             this._promises.push(p)
             this.start()
         }
+
         const cleanupDelayTimer = () => {
             const timers = this._delayTimers
             timers.splice(timers.indexOf(delayTid!) >>> 0, 1)
             delayTid = null
         }
+
         if (delay > 0) {
-            this._delayTimers.push(
-                (delayTid = setTimeout(() => {
-                    cleanupDelayTimer()
-                    start()
-                }, delay)),
-            )
+            this._delayTimers.push((delayTid = setTimeout(() => (cleanupDelayTimer(), start()), delay)))
         } else {
             start()
         }
 
-        const onFinally = () => {
+        const next = (val: T | Promise<T>) => {
             if (delayTid) {
                 clearTimeout(delayTid)
                 cleanupDelayTimer()
-                return
+                return val
             }
+
+            const ret =
+                waitAnimation && this._state !== STATE.NOTHING
+                    ? new Promise<void>(r => this._detachListeners.push(r)).then(() => val)
+                    : val
+
             const promises = this._promises
             const idx = promises.indexOf(p)
             if (~idx) {
                 promises.splice(idx, 1)
                 if (promises.length === 0) this.end()
             }
+
+            return ret
         }
-        const ret = p.then(
-            val => (onFinally(), val),
-            err => (onFinally(), Promise.reject(err)),
-        )
-        if (waitAnimation) {
-            return ret.then(
-                v =>
-                    new Promise(res => {
-                        this._el.addEventListener(
-                            'transitionend',
-                            function f() {
-                                requestAnimationFrame(() => requestAnimationFrame(() => res(v)))
-                                this.removeEventListener('transitionend', f)
-                            },
-                            { once: true },
-                        )
-                    }),
-            )
-        }
-        return ret
+
+        return p.then(next, err => next(Promise.reject(err)))
     }
 }
 
@@ -240,8 +233,4 @@ function assign<T1, T2>(target: T1, src: T2): T1 & T2 {
         if (Object.prototype.hasOwnProperty.call(src, k)) (target as any)[k] = src[k]
     }
     return target as T1 & T2
-}
-
-function detach(el: HTMLElement) {
-    if (el.parentNode) el.parentNode.removeChild(el)
 }

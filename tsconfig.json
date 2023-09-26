@@ -3,7 +3,11 @@
         "target": "ES5",
         "module": "ES2015",
         "lib": ["DOM", "ES2015"],
-        "declaration": true
+        "declaration": true,
+        "baseUrl": ".",
+        "paths": {
+            "rsup-progress": ["./src/index.ts"]
+        }
     },
-    "include": ["src/"]
+    "include": ["src/", "website/"]
 }
