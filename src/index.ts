@@ -13,7 +13,7 @@ export interface ProgressOptions {
 
 const STATE = {
     DISAPPEAR: 0,
-    NOTHING: 1,
+    NONE: 1,
     APPEAR: 2,
     PENDING: 3,
     DISAPPEAR_RESTART: 4,
@@ -23,7 +23,7 @@ const PERSIST_TIME = 150
 
 export class Progress {
     private _el = document.createElement('div')
-    private _state = STATE.NOTHING as (typeof STATE)[keyof typeof STATE]
+    private _state = STATE.NONE as (typeof STATE)[keyof typeof STATE]
     private _opts = {
         maxWidth: '99.8%',
         height: '4px',
@@ -36,9 +36,9 @@ export class Progress {
         position: 'top',
         container: document.body,
     }
-    private _rafId: number | null = null
-    private _timerId: ReturnType<typeof setTimeout> | null = null
-    private _promises: Promise<any>[] = []
+    private _appearRafId: number | null = null
+    private _disappearTid: ReturnType<typeof setTimeout> | null = null
+    private _pendingPromises: Promise<any>[] = []
     private _delayTimers: ReturnType<typeof setTimeout>[] = []
     private _detachListeners: (() => void)[] = []
 
@@ -111,9 +111,9 @@ export class Progress {
         })
         opts.container.appendChild(this._el)
 
-        this._rafId = requestAnimationFrame(() => {
-            this._rafId = requestAnimationFrame(() => {
-                this._rafId = null
+        this._appearRafId = requestAnimationFrame(() => {
+            this._appearRafId = requestAnimationFrame(() => {
+                this._appearRafId = null
                 this._state = STATE.PENDING
                 this._css({ width: this._opts.maxWidth })
             })
@@ -121,24 +121,24 @@ export class Progress {
     }
 
     end(immediately = false) {
-        this._promises = []
+        this._pendingPromises = []
         this._delayTimers.splice(0).forEach(clearTimeout)
 
         switch (this._state) {
-            case STATE.NOTHING:
+            case STATE.NONE:
                 return
             case STATE.APPEAR:
-                this._state = STATE.NOTHING
-                cancelAnimationFrame(this._rafId!)
-                this._rafId = null
+                this._state = STATE.NONE
+                cancelAnimationFrame(this._appearRafId!)
+                this._appearRafId = null
                 this._detach()
                 return
             case STATE.DISAPPEAR:
             case STATE.DISAPPEAR_RESTART:
                 if (immediately) {
-                    this._state = STATE.NOTHING
-                    clearTimeout(this._timerId!)
-                    this._timerId = null
+                    this._state = STATE.NONE
+                    clearTimeout(this._disappearTid!)
+                    this._disappearTid = null
                     this._detach()
                 } else {
                     this._state = STATE.DISAPPEAR
@@ -147,7 +147,7 @@ export class Progress {
         }
 
         if (immediately) {
-            this._state = STATE.NOTHING
+            this._state = STATE.NONE
             this._detach()
             return
         }
@@ -162,10 +162,10 @@ export class Progress {
             webkitTransition: transition,
         })
 
-        this._timerId = setTimeout(() => {
-            this._timerId = null
+        this._disappearTid = setTimeout(() => {
+            this._disappearTid = null
             const restart = this._state === STATE.DISAPPEAR_RESTART
-            this._state = STATE.NOTHING
+            this._state = STATE.NONE
 
             this._detach()
             if (restart) {
@@ -186,18 +186,18 @@ export class Progress {
             if (min > 0) {
                 p = Promise.all([p, new Promise(res => setTimeout(res, min))]).then(([v]) => v)
             }
-            this._promises.push(p)
+            this._pendingPromises.push(p)
             this.start()
         }
 
-        const cleanupDelayTimer = () => {
+        const clearDelayTimer = () => {
             const timers = this._delayTimers
             timers.splice(timers.indexOf(delayTid!) >>> 0, 1)
             delayTid = null
         }
 
         if (delay > 0) {
-            this._delayTimers.push((delayTid = setTimeout(() => (cleanupDelayTimer(), start()), delay)))
+            this._delayTimers.push((delayTid = setTimeout(() => (clearDelayTimer(), start()), delay)))
         } else {
             start()
         }
@@ -205,20 +205,20 @@ export class Progress {
         const next = (val: T | Promise<T>) => {
             if (delayTid) {
                 clearTimeout(delayTid)
-                cleanupDelayTimer()
+                clearDelayTimer()
                 return val
             }
 
             const ret =
-                waitAnimation && this._state !== STATE.NOTHING
+                waitAnimation && this._state !== STATE.NONE
                     ? new Promise<void>(r => this._detachListeners.push(r)).then(() => val)
                     : val
 
-            const promises = this._promises
-            const idx = promises.indexOf(p)
+            const arr = this._pendingPromises
+            const idx = arr.indexOf(p)
             if (~idx) {
-                promises.splice(idx, 1)
-                if (promises.length === 0) this.end()
+                arr.splice(idx, 1)
+                if (arr.length === 0) this.end()
             }
 
             return ret
