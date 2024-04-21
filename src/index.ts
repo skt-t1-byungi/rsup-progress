@@ -129,7 +129,7 @@ export class Progress {
                 return
             case STATE.APPEAR:
                 this._state = STATE.NONE
-                cancelAnimationFrame(this._appearRafId!)
+                cancelAnimationFrame(this._appearRafId)
                 this._appearRafId = null
                 this._detach()
                 return
@@ -137,7 +137,7 @@ export class Progress {
             case STATE.DISAPPEAR_RESTART:
                 if (immediately) {
                     this._state = STATE.NONE
-                    clearTimeout(this._disappearTid!)
+                    clearTimeout(this._disappearTid)
                     this._disappearTid = null
                     this._detach()
                 } else {
@@ -192,12 +192,16 @@ export class Progress {
 
         const clearDelayTimer = () => {
             const timers = this._delayTimers
-            timers.splice(timers.indexOf(delayTid!) >>> 0, 1)
+            timers.splice(timers.indexOf(delayTid) >>> 0, 1)
             delayTid = null
         }
 
         if (delay > 0) {
-            this._delayTimers.push((delayTid = setTimeout(() => (clearDelayTimer(), start()), delay)))
+            delayTid = setTimeout(() => {
+                clearDelayTimer()
+                start()
+            }, delay)
+            this._delayTimers.push(delayTid)
         } else {
             start()
         }
